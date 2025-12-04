@@ -15,4 +15,4 @@ jobs:
          scheme: full
          run: |
           pdflatex -interaction=nonstopmode content/main.tex
-          lwarp content/main.tex
+          lwarpmk content/main.tex

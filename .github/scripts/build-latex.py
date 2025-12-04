@@ -13,11 +13,11 @@ def install_dependencies():
     elif shutil.which('apk'):
         subprocess.run(['apk', 'add', '--no-cache', 'poppler-utils'], check=True)
 
-def find_tex_files(content_dir):
+def find_tex_files(content_dir: Path):
     """Find all .tex files in content directory."""
     return list(Path(content_dir).rglob('*.tex'))
 
-def build_latex_to_html(tex_file, root_dir, tmproot, public_dir):
+def build_latex_to_html(tex_file: Path, root_dir: Path, tmproot: Path, public_dir: Path):
     """Build a single LaTeX file to HTML."""
     src_dir = tex_file.parent
     base_name = tex_file.stem
@@ -33,6 +33,11 @@ def build_latex_to_html(tex_file, root_dir, tmproot, public_dir):
     shutil.copy2(tex_file, job_dir / f'{base_name}.tex')
     
     # Build PDF in job directory
+    subprocess.run(
+        ['ls'],
+        cwd=job_dir,
+        check=True
+    )
     subprocess.run(
         ['pdflatex', '-interaction=nonstopmode', '-halt-on-error', f'{base_name}.tex'],
         cwd=job_dir,

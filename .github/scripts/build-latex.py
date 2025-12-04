@@ -6,41 +6,40 @@ import shutil
 from pathlib import Path
 
 def install_dependencies():
+    """Install required system packages."""
     if shutil.which('apt-get'):
         subprocess.run(['apt-get', 'update'], check=True)
         subprocess.run(['apt-get', 'install', '-y', '--no-install-recommends', 'poppler-utils'], check=True)
     elif shutil.which('apk'):
         subprocess.run(['apk', 'add', '--no-cache', 'poppler-utils'], check=True)
 
-def find_tex_files(content_dir: Path):
+def find_tex_files(content_dir):
+    """Find all .tex files in content directory."""
     return list(Path(content_dir).rglob('*.tex'))
 
-def build_latex_to_html(tex_file: Path, root_dir: Path, tmproot: Path, public_dir: Path):
+def build_latex_to_html(tex_file, root_dir, tmproot, public_dir):
     """Build a single LaTeX file to HTML."""
     src_dir = tex_file.parent
     base_name = tex_file.stem
     
-    # Create temp directory matching source structure
-    job_dir = tmproot / src_dir.relative_to(root_dir / 'content') / tex_file.stem
+    # Create temp directory: temp/<relative_path_to_tex>/<tex_basename>/
+    relative_path = src_dir.relative_to(root_dir / 'content')
+    job_dir = tmproot / relative_path / base_name
     job_dir.mkdir(parents=True, exist_ok=True)
     
     print(f"Processing {tex_file} in {job_dir}")
     
-    # Copy all files from source directory
-    for item in src_dir.iterdir():
-        if item.is_file():
-            shutil.copy2(item, job_dir)
-        elif item.is_dir():
-            shutil.copytree(item, job_dir / item.name, dirs_exist_ok=True)
+    # Copy only the .tex file to job directory
+    shutil.copy2(tex_file, job_dir / f'{base_name}.tex')
     
-    # Build PDF
+    # Build PDF in job directory
     subprocess.run(
         ['pdflatex', '-interaction=nonstopmode', '-halt-on-error', f'{base_name}.tex'],
         cwd=job_dir,
         check=True
     )
     
-    # Generate HTML with lwarp
+    # Generate HTML with lwarp in job directory
     subprocess.run(
         ['lwarpmk', 'html'],
         cwd=job_dir,
@@ -49,13 +48,13 @@ def build_latex_to_html(tex_file: Path, root_dir: Path, tmproot: Path, public_di
     
     # Clean up intermediate files
     subprocess.run(
-        ['lwarpmk', 'clean', '-p', base_name],
+        ['lwarpmk', 'clean',],
         cwd=job_dir,
         check=False  # Don't fail if clean fails
     )
     
-    # Copy HTML files to public directory
-    output_dir = public_dir / src_dir.relative_to(root_dir / 'content')
+    # Copy HTML files to public directory (mirror source structure)
+    output_dir = public_dir / relative_path
     output_dir.mkdir(parents=True, exist_ok=True)
     
     for html_file in job_dir.glob('*.html'):

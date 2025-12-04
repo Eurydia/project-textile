@@ -22,8 +22,8 @@ jobs:
           texlive_version: latest
           scheme: full
           run: |
-            chmod +x .github/scripts/build-latex.sh
-            .github/scripts/build-latex.sh
+            chmod +x .github/scripts/build-latex.py
+            python3 .github/scripts/build-latex.py
 
       - name: Upload HTML for next job
         uses: actions/upload-artifact@v4

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main  
+      - main
     paths:
       - 'content/**/*.tex'
 
@@ -35,10 +35,8 @@ jobs:
             fi
             
             ROOT="$GITHUB_WORKSPACE"
-            TMPROOT="${RUNNER_TEMP:-/tmp}/lwarp-jobs"
-            mkdir -p "$TMPROOT"
+            TMPROOT="${RUNNER_TEMP:-/tmp}/lwarp-build"
             
-            # Find .tex files relative to ROOT
             cd "$ROOT"
             
             # Check if any .tex files exist
@@ -51,12 +49,15 @@ jobs:
               while IFS= read -r -d '' tex; do
                 src_dir="$(dirname "$tex")"
                 base="$(basename "$tex" .tex)"
-                jobdir="$(mktemp -d "$TMPROOT/${base}-XXXX")"
+                
+                # Mirror the content directory structure in temp
+                jobdir="$TMPROOT/$src_dir"
+                mkdir -p "$jobdir"
                 
                 echo "Processing $tex in $jobdir"
                 
-                # Copy source files to temp directory
-                cp -a "$ROOT/$src_dir"/. "$jobdir"/
+                # Copy the .tex file to temp directory
+                cp "$ROOT/$tex" "$jobdir/"
                 cd "$jobdir"
                 
                 # Build PDF first
@@ -69,17 +70,10 @@ jobs:
                 mkdir -p "$ROOT/$src_dir"
                 
                 # Copy HTML files back
-                find . -maxdepth 1 -type f -name '*.html' -print0 | \
-                  while IFS= read -r -d '' f; do
-                    cp "$f" "$ROOT/$src_dir/"
-                    echo "Copied $(basename "$f") to $ROOT/$src_dir/"
-                  done
+                find . -maxdepth 1 -type f -name '*.html' -exec cp {} "$ROOT/$src_dir/" \;
                 
-                # Clean up temp files
+                # Clean up
                 lwarpmk clean -p "$base" || true
-                
-                cd "$ROOT"
-                rm -rf "$jobdir"
               done
 
       - name: Upload HTML artifacts

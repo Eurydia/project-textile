@@ -31,10 +31,12 @@ def build_latex_to_html(tex_file: Path, root_dir: Path, tmproot: Path, public_di
     
     # Copy only the .tex file to job directory
     shutil.copy2(tex_file, job_dir / f'{base_name}.tex')
+    print(f"!!!!!!!!!!!!!!!!!!!!!!{os.getcwd()}")
     
    # Save current directory and change to job directory
     original_dir = os.getcwd()
     os.chdir(job_dir)
+
     
     try:
         # Build PDF in job directory

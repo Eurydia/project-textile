@@ -1,4 +1,4 @@
-name: Build HTML from TeX
+name: Build and Deploy
 
 on:
   workflow_dispatch:
@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build_html:
@@ -18,74 +20,48 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build HTML from LaTeX with lwarp
+      - name: Build HTML from LaTeX
         uses: xu-cheng/texlive-action@v3
         with:
           texlive_version: latest
           scheme: full
           run: |
-            set -euxo pipefail
-            
-            if command -v apt-get >/dev/null 2>&1; then
-              apt-get update
-              apt-get install -y --no-install-recommends poppler-utils
-            elif command -v apk >/dev/null 2>&1; then
-              apk add --no-cache poppler-utils
-            fi
-            
-            ROOT="$GITHUB_WORKSPACE"
-            TMPROOT="${RUNNER_TEMP:-/tmp}/lwarp-build"
-            
-            cd "$ROOT"
-            
-            if ! find content -type f -name '*.tex' -print -quit | grep -q .; then
-              echo "Error: No .tex files found in content directory"
-              exit 1
-            fi
-            
-            find content -type f -name '*.tex' -print0 | \
-              while IFS= read -r -d '' tex; do
-                src_dir="$(dirname "$tex")"
-                base="$(basename "$tex" .tex)"
-                
-                jobdir="$TMPROOT/$src_dir"
-                mkdir -p "$jobdir"
-                
-                echo "Processing $tex in $jobdir"
-                
-                cp "$ROOT/$tex" "$jobdir/"
-                cd "$jobdir"
-                
-                pdflatex -interaction=nonstopmode -halt-on-error "$base.tex"
-                
-                lwarpmk html -p "$base"
-                
-                mkdir -p "$ROOT/$src_dir"
-                
-                # Cleaning here is mandatory
-                # otherwise there will be two .html files generated
-                # one with suffix {doc_name}_html.html and one without {doc_name}.html
-                lwarpmk clean -p "$base" || true
-                
-                find . -maxdepth 1 -type f -name '*.html' -exec cp {} "$ROOT/$src_dir/" \;
-                
-              done
-      
-      - name: Commit and push HTML to public/
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add public/
-          if git diff --staged --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Auto-generate HTML from TeX files [skip ci]"
-            git push
-          fi
-          
-      - name: Upload HTML artifacts
+            chmod +x .github/scripts/build-latex.sh
+            .github/scripts/build-latex.sh
+
+      - name: Upload HTML for next job
         uses: actions/upload-artifact@v4
         with:
-          name: lwarp-html
-          path: content/**/*.html
-          if-no-files-found: error
+          name: generated-html
+          path: public/
+
+  build_and_deploy:
+    needs: build_html
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download generated HTML
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-html
+          path: public/
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist

@@ -6,9 +6,13 @@ on:
       - 'content/**.tex'
 
 jobs:
-  install_tex_tools:
-    name: Install tex related tools
+  build_tex:
     runs-on: ubuntu-latest
     steps:
-      - name: Install texlive 
-        run: sudo apt-get install -y texlive-full
+      - uses: actions/checkout@v4
+      - uses: xu-cheng/texlive-action@v3
+        with:
+         scheme: full
+         run: |
+          pdflatex -interaction=nonstopmode content/main.tex
+          lwarp content/main.tex

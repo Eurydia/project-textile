@@ -1,3 +1,4 @@
+name: Prebuild with pdflatex and lwarp
 on:
   workflow_dispatch:
   push:
@@ -5,9 +6,9 @@ on:
     - 'content/**.tex'
 
 jobs:
-  print-tag:
-  runs-on: ubuntu-latest
-  if: ${{ inputs.print_tags }} 
-  steps:
-    - name: Print the input tag to STDOUT
-      run: echo  The tags are ${{ inputs.tags }} 
+  install_tex_tools:
+    name: Install tex related tools
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install texlive 
+        run: sudo apt-get install -y texlive-full

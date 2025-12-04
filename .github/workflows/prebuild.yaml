@@ -19,6 +19,7 @@ jobs:
           texlive_version: latest
           scheme: full        
           run: |
+            tlmgr update --self --all
             tlmgr install pdftolatex
             set -euxo pipefail
 

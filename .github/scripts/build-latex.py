@@ -42,7 +42,7 @@ def build_latex_to_html(tex_file: Path, root_dir: Path, tmproot: Path, public_di
     
     # Generate HTML with lwarp
     subprocess.run(
-        ['lwarpmk', 'html', '-p', base_name],
+        ['lwarpmk', 'html'],
         cwd=job_dir,
         check=True
     )

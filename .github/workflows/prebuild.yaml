@@ -1,0 +1,7 @@
+on:
+  workflow_dispatch:
+  push:
+   paths:
+    - 'content/**.tex'
+
+jobs:

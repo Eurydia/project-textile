@@ -61,13 +61,28 @@ jobs:
                 lwarpmk html -p "$base"
                 
                 mkdir -p "$ROOT/$src_dir"
-
+                
+                # Cleaning here is mandatory
+                # otherwise there will be two .html files generated
+                # one with suffix {doc_name}_html.html and one without {doc_name}.html
                 lwarpmk clean -p "$base" || true
                 
                 find . -maxdepth 1 -type f -name '*.html' -exec cp {} "$ROOT/$src_dir/" \;
                 
               done
-
+      
+      - name: Commit and push HTML to public/
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add public/
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Auto-generate HTML from TeX files [skip ci]"
+            git push
+          fi
+          
       - name: Upload HTML artifacts
         uses: actions/upload-artifact@v4
         with:

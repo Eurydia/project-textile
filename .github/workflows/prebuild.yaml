@@ -2,8 +2,8 @@ name: Prebuild with pdflatex and lwarp
 on:
   workflow_dispatch:
   push:
-   paths:
-    - 'content/**.tex'
+    paths:
+      - 'content/**.tex'
 
 jobs:
   install_tex_tools:

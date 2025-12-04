@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage[mathjax]{lwarp}
+\usepackage{amsmath}   % For equations
+\usepackage{hyperref}  % For internal & external links
+
+\title{Sample \LaTeX{} Document with Links}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+This is a short example demonstrating:
+\begin{itemize}
+  \item Equations with labels and references,
+  \item Internal links (sections, equations),
+  \item External links (websites and email).
+\end{itemize}
+
+We will define a simple equation in Section~\ref{sec:math} and
+refer to it as Equation~\eqref{eq:pythagoras}.
+
+\section{A Simple Equation}
+\label{sec:math}
+
+Consider the Pythagorean theorem:
+\begin{equation}
+  a^2 + b^2 = c^2
+  \label{eq:pythagoras}
+\end{equation}
+We can now reference Equation~\eqref{eq:pythagoras} from anywhere
+in the document.
+
+\section{Links}
+\subsection{External Links}
+
+Here is a link to the \LaTeX{} project homepage:
+\href{https://www.latex-project.org}{\LaTeX{} Project Website}.
+
+You can also typeset a bare URL:
+\url{https://www.latex-project.org}.
+
+And an email link:
+\href{mailto:someone@example.com}{someone@example.com}
+
+\subsection{Internal Links}
+You have already seen internal links via:
+\begin{itemize}
+  \item The table of contents at the beginning of this document.
+  \item Cross-references like Section~\ref{sec:math}
+        and Equation~\eqref{eq:pythagoras}.
+\end{itemize}
+
+\end{document}

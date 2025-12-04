@@ -14,5 +14,7 @@ jobs:
         with:
          scheme: full
          run: |
-          pdflatex -interaction=nonstopmode content/main.tex
-          lwarpmk content/main.tex
+          cd content
+          pdflatex -interaction=nonstopmode output
+          lwarpmk html main.tex
+          lwarpmk clean

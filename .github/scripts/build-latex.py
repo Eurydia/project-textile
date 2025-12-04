@@ -21,7 +21,7 @@ def build_latex_to_html(tex_file: Path, root_dir: Path, tmproot: Path, public_di
     base_name = tex_file.stem
     
     # Create temp directory matching source structure
-    job_dir = tmproot / src_dir.relative_to(root_dir / 'content') / tex_file.name
+    job_dir = tmproot / src_dir.relative_to(root_dir / 'content') / tex_file.stem
     job_dir.mkdir(parents=True, exist_ok=True)
     
     print(f"Processing {tex_file} in {job_dir}")

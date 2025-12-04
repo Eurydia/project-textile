@@ -32,24 +32,8 @@ def build_latex_to_html(tex_file: Path, root_dir: Path, tmproot: Path, public_di
     # Copy only the .tex file to job directory
     shutil.copy2(tex_file, job_dir / f'{base_name}.tex')
     
-    print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
-    # Build PDF in job directory
-    subprocess.run(
-        ['ls'],
-        cwd=job_dir,
-        check=True
-    )
     subprocess.run(
         ['pdflatex', '-interaction=nonstopmode', '-halt-on-error', f'{base_name}.tex'],
-        cwd=job_dir,
-        check=True
-    )
-
-    print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
-    subprocess.run(
-        ['ls'],
         cwd=job_dir,
         check=True
     )

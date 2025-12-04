@@ -8,10 +8,6 @@ on:
     paths:
       - 'content/**/*.tex'
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 
 jobs:
   build_html:

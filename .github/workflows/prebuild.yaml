@@ -19,6 +19,7 @@ jobs:
           texlive_version: latest
           scheme: full        
           run: |
+            tlmgr install pdftolatex
             set -euxo pipefail
 
             while IFS= read -r file; do

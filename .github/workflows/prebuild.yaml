@@ -26,7 +26,6 @@ jobs:
           run: |
             set -euxo pipefail
             
-            # Install poppler-utils for PDF processing
             if command -v apt-get >/dev/null 2>&1; then
               apt-get update
               apt-get install -y --no-install-recommends poppler-utils
@@ -39,7 +38,6 @@ jobs:
             
             cd "$ROOT"
             
-            # Check if any .tex files exist
             if ! find content -type f -name '*.tex' -print -quit | grep -q .; then
               echo "Error: No .tex files found in content directory"
               exit 1
@@ -50,29 +48,22 @@ jobs:
                 src_dir="$(dirname "$tex")"
                 base="$(basename "$tex" .tex)"
                 
-                # Mirror the content directory structure in temp
                 jobdir="$TMPROOT/$src_dir"
                 mkdir -p "$jobdir"
                 
                 echo "Processing $tex in $jobdir"
                 
-                # Copy the .tex file to temp directory
                 cp "$ROOT/$tex" "$jobdir/"
                 cd "$jobdir"
                 
-                # Build PDF first
                 pdflatex -interaction=nonstopmode -halt-on-error "$base.tex"
                 
-                # Generate HTML with lwarp
                 lwarpmk html -p "$base"
                 
-                # Create output directory
                 mkdir -p "$ROOT/$src_dir"
                 
-                # Copy HTML files back
-                find . -maxdepth 1 -type f -name '*.html' -exec cp {} "$ROOT/$src_dir/" \;
+                find . -maxdepth 1 -type f -name '*_html.html' -exec cp {} "$ROOT/$src_dir/" \;
                 
-                # Clean up
                 lwarpmk clean -p "$base" || true
               done
 

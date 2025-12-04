@@ -32,33 +32,40 @@ def build_latex_to_html(tex_file: Path, root_dir: Path, tmproot: Path, public_di
     # Copy only the .tex file to job directory
     shutil.copy2(tex_file, job_dir / f'{base_name}.tex')
     
-    subprocess.run(
-        ['pdflatex', '-interaction=nonstopmode', '-halt-on-error', f'{base_name}.tex'],
-        cwd=job_dir,
-        check=True
-    )
+   # Save current directory and change to job directory
+    original_dir = os.getcwd()
+    os.chdir(job_dir)
     
-    # Generate HTML with lwarp in job directory
-    subprocess.run(
-        ['lwarpmk', 'html'],
-        cwd=job_dir,
-        check=True
-    )
+    try:
+        # Build PDF in job directory
+        subprocess.run(
+            ['pdflatex', '-interaction=nonstopmode', '-halt-on-error', f'{base_name}.tex'],
+            check=True
+        )
+        
+        # Generate HTML with lwarp in job directory
+        subprocess.run(
+            ['lwarpmk', 'html', '-p', base_name],
+            check=True
+        )
+        
+        # Clean up intermediate files
+        subprocess.run(
+            ['lwarpmk', 'clean', '-p', base_name],
+            check=False  # Don't fail if clean fails
+        )
+        
+        # Copy HTML files to public directory (mirror source structure)
+        output_dir = public_dir / relative_path
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        for html_file in Path('.').glob('*.html'):
+            shutil.copy2(html_file, output_dir)
+            print(f"Copied {html_file.name} to {output_dir}")
     
-    # Clean up intermediate files
-    subprocess.run(
-        ['lwarpmk', 'clean',],
-        cwd=job_dir,
-        check=False  # Don't fail if clean fails
-    )
-    
-    # Copy HTML files to public directory (mirror source structure)
-    output_dir = public_dir / relative_path
-    output_dir.mkdir(parents=True, exist_ok=True)
-    
-    for html_file in job_dir.glob('*.html'):
-        shutil.copy2(html_file, output_dir)
-        print(f"Copied {html_file.name} to {output_dir}")
+    finally:
+        # Always restore original directory
+        os.chdir(original_dir)
 
 def main():
     # Setup directories

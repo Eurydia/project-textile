@@ -18,28 +18,11 @@ jobs:
       - name: Install TeX Live
         uses: xu-cheng/texlive-action@v3
         with:
-          scheme: full
-          run: |
-            mkdir -p output
-            shopt -s nullglob
-            for tex_file in content/*.tex; do
-              echo "Building ${tex_file}"
-              pdflatex -interaction=nonstopmode "${tex_file}"
-              lwarpmk "${tex_file}"
-              html_file="${tex_file%.tex}.html"
-              if [ -f "${html_file}" ]; then
-                cp "${html_file}" "output/$(basename "${html_file}")"
-              fi
-            done
-
-      - name: Commit and push generated HTML
-        run: |
-          if git status --porcelain output | grep .; then
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git add output
-            git commit -m "Update generated HTML"
-            git push
-          else
-            echo "No changes in output to commit."
-          fi
+         scheme: full
+         run: |
+          cd content
+          cp main.tex ${{ runner.temp }}
+          cd ${{ runner.temp }}
+          pdflatex -interaction=nonstopmode main.tex
+          lwarpmk html main.tex
+          lwarpmk clean

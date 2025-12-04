@@ -1,28 +1,43 @@
-name: Prebuild with pdflatex and lwarp
+name: Build HTML from TeX
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - 'content/**.tex'
+      - 'content/**/*.tex'
 
 jobs:
-  build_tex:
+  build_html:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Install TeX Live
+      - name: Build HTML from LaTeX with lwarp
         uses: xu-cheng/texlive-action@v3
         with:
-         scheme: full
-         run: |
-          cd content
-          cp main.tex ${{ runner.temp }}
-          cd ${{ runner.temp }}
-          pdflatex -interaction=nonstopmode main.tex
-          lwarpmk html main.tex
-          lwarpmk clean
+          texlive_version: latest
+          scheme: full        
+          run: |
+            set -euxo pipefail
+
+            while IFS= read -r file; do
+              dir="$(dirname "$file")"
+              base="$(basename "$file")"
+              job="${base%.tex}"
+
+              cd "$dir"
+
+              pdflatex -interaction=nonstopmode -halt-on-error "$job.tex"
+
+              lwarpmk html 
+              cd - >/dev/null
+            done < <(find content -type f -name '*.tex' -print)
+
+      - name: Upload HTML artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: lwarp-html
+          path: |
+            content/**/*.html
+          if-no-files-found: error

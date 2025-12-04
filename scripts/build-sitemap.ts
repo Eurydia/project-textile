@@ -1,6 +1,6 @@
-import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
-import path, { posix } from 'node:path'
-import { globby, globbyStream, globbySync } from 'globby'
+import { readFileSync, writeFileSync } from 'node:fs'
+import { posix } from 'node:path'
+import { globbySync } from 'globby'
 import { JSDOM } from 'jsdom'
 
 const sitemap: Record<

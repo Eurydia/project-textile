@@ -29,4 +29,5 @@ for (const dir of ['publications', 'ongoing']) {
 writeFileSync(
   posix.join(posix.dirname(process.cwd()), 'public', 'sitemap.json'),
   JSON.stringify(sitemap, null, 2),
+  { flag: 'w+' },
 )

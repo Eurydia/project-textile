@@ -1,18 +1,55 @@
 name: Prebuild with pdflatex and lwarp
+
 on:
   workflow_dispatch:
   push:
     paths:
       - 'content/**.tex'
 
+permissions:
+  contents: write
+
 jobs:
   build_tex:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: xu-cheng/texlive-action@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-         scheme: full
-         run: |
-          pdflatex -interaction=nonstopmode content/main.tex
-          lwarpmk content/main.tex
+          fetch-depth: 0
+
+      - name: Install TeX Live
+        uses: xu-cheng/texlive-action@v3
+        with:
+          scheme: full
+          run: |
+            mkdir -p output
+            shopt -s nullglob
+            while IFS= read -r tex_file; do
+              echo "Building ${tex_file}"
+              tex_dir=$(dirname "${tex_file}")
+              tex_base=$(basename "${tex_file}" .tex)
+              pushd "${tex_dir}" >/dev/null
+              pdflatex -interaction=nonstopmode "${tex_base}.tex"
+              lwarpmk html "${tex_base}.tex"
+              popd >/dev/null
+
+              html_file="${tex_dir}/${tex_base}.html"
+              if [ -f "${html_file}" ]; then
+                cp "${html_file}" "output/${tex_base}.html"
+              else
+                echo "No HTML produced for ${tex_file}"
+              fi
+            done < <(find content -name '*.tex' -type f | sort)
+
+      - name: Commit and push generated HTML
+        run: |
+          if git status --porcelain output | grep .; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add output
+            git commit -m "Update generated HTML"
+            git push
+          else
+            echo "No changes in output to commit."
+          fi

@@ -45,6 +45,9 @@ def build_latex_to_html(tex_file: Path, root_dir: Path, tmproot: Path, public_di
         cwd=job_dir,
         check=True
     )
+
+    print(f"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+
     subprocess.run(
         ['ls'],
         cwd=job_dir,

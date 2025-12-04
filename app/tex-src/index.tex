@@ -1,0 +1,174 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[mathjax]{lwarp}
+
+% --- Common packages ---
+\usepackage[margin=1in]{geometry}   % Page layout
+\usepackage{amsmath, amssymb}       % Math
+\usepackage{graphicx}               % Images
+\usepackage{xcolor}                 % Colors
+\usepackage{hyperref}               % Links and PDF metadata
+
+% --- Hyperref setup (make links colored but not too loud) ---
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=magenta,
+    citecolor=teal,
+    pdfauthor={Your Name},
+    pdftitle={LaTeX Internal and External Links Demo}
+}
+
+\title{Demo: Internal \& External Links, Common Packages, and Equations}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\clearpage
+
+% --------------------------------------------------------
+\section{Introduction}
+\label{sec:intro}
+This document demonstrates:
+\begin{itemize}
+    \item Internal links to sections (see Section~\ref{sec:internal-links}),
+          equations (see Equation~\eqref{eq:pythagoras}),
+          and figures (see Figure~\ref{fig:example-figure}).
+    \item External links to websites, e.g.~\href{https://www.latex-project.org}{LaTeX Project website}.
+    \item Use of common packages like \texttt{amsmath}, \texttt{amssymb}, \texttt{graphicx}, and \texttt{hyperref}.
+\end{itemize}
+
+You can also simply show a URL with \verb|\url|:
+\url{https://www.ctan.org}
+
+% --------------------------------------------------------
+\section{Internal Links}
+\label{sec:internal-links}
+
+In this section we add labels to various elements and then reference them.
+
+\subsection{Linking to Sections}
+\label{subsec:link-sections}
+
+This is Subsection~\ref{subsec:link-sections}. You can click on its reference
+anywhere in the PDF (if your viewer supports hyperlinks). For example, jump back
+to the Introduction in Section~\ref{sec:intro}.
+
+\subsection{Linking to Equations}
+\label{subsec:link-equations}
+
+Below is an important equation with a label:
+
+\begin{equation}
+    a^2 + b^2 = c^2
+    \label{eq:pythagoras}
+\end{equation}
+
+We can refer to it as Equation~\eqref{eq:pythagoras} anywhere in the text.
+This uses \texttt{amsmath} for equation handling.
+
+We can also use other math environments, e.g.~\texttt{align}:
+
+\begin{align}
+    \nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0}, \label{eq:maxwell1} \\
+    \nabla \cdot \vec{B} &= 0,                               \label{eq:maxwell2} \\
+    \nabla \times \vec{E} &= -\frac{\partial \vec{B}}{\partial t}, \label{eq:maxwell3} \\
+    \nabla \times \vec{B} &= \mu_0 \vec{J} + \mu_0 \varepsilon_0 \frac{\partial \vec{E}}{\partial t}. \label{eq:maxwell4}
+\end{align}
+
+Equations~\eqref{eq:maxwell1}--\eqref{eq:maxwell4} show Maxwell's equations.
+
+\subsection{Linking to Figures}
+\label{subsec:link-figures}
+
+We can include a figure (placeholder image) and label it for future reference.
+If you don't have an image, you can comment out the \verb|\includegraphics| line.
+
+\begin{figure}[h]
+    \centering
+    % Replace "example-image.png" with your own file, or leave commented.
+    % \includegraphics[width=0.5\textwidth]{example-image.png}
+    \fbox{\rule{0pt}{2in}\rule{3in}{0pt}} % simple placeholder box
+    \caption{Example figure (replace with your image).}
+    \label{fig:example-figure}
+\end{figure}
+
+Now we can refer to Figure~\ref{fig:example-figure} in the text, and it will be
+an internal clickable link.
+
+% --------------------------------------------------------
+\section{External Links}
+\label{sec:external-links}
+
+External links are usually created with \verb|\href| or \verb|\url| from
+the \texttt{hyperref} package.
+
+For example:
+\begin{itemize}
+    \item \href{https://www.overleaf.com}{Overleaf} -- an online LaTeX editor.
+    \item \href{https://www.ctan.org}{CTAN} -- \textbf{C}omprehensive \textbf{T}eX \textbf{A}rchive \textbf{N}etwork.
+    \item \url{https://www.github.com} -- shown as plain URL.
+\end{itemize}
+
+You can also make external links out of arbitrary text:
+\begin{quote}
+    For documentation and examples, see the
+    \href{https://www.latex-project.org/help/documentation/}{LaTeX documentation page}.
+\end{quote}
+
+% --------------------------------------------------------
+\section{More Equation Samples (amsmath)}
+\label{sec:more-equations}
+
+Here are some additional equation samples using \texttt{amsmath}.
+
+\subsection{Summations and Integrals}
+
+\begin{equation}
+    \sum_{n=1}^{\infty} \frac{1}{n^2} = \frac{\pi^2}{6}.
+\end{equation}
+
+\begin{equation}
+    \int_{0}^{1} x^2 \, dx = \left[\frac{x^3}{3}\right]_0^1 = \frac{1}{3}.
+\end{equation}
+
+\subsection{Cases Environment}
+
+\begin{equation}
+    f(x) = 
+    \begin{cases}
+        x^2, & \text{if } x \ge 0, \\
+        -x,  & \text{if } x < 0.
+    \end{cases}
+\end{equation}
+
+\subsection{Matrices}
+
+\begin{equation}
+    A = 
+    \begin{pmatrix}
+        1 & 2 & 3 \\
+        0 & -1 & 4 \\
+        5 & 2 & 0
+    \end{pmatrix}.
+\end{equation}
+
+We can mention this matrix again as ``matrix $A$ in Section~\ref{sec:more-equations}''.
+
+% --------------------------------------------------------
+\section{Colored Text and Emphasis (xcolor)}
+\label{sec:colors}
+
+Using \texttt{xcolor} we can highlight parts of the text:
+
+This is \textcolor{red}{red}, this is \textcolor{blue}{blue},
+and this is \textcolor{green!50!black}{dark green}.
+
+We can even combine colors with links, for instance:
+
+\textcolor{blue}{\href{https://en.wikipedia.org/wiki/LaTeX}{Click here to open the LaTeX article on Wikipedia}}.
+
+
+\end{document}

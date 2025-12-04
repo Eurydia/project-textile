@@ -45,13 +45,13 @@ def build_latex_to_html(tex_file: Path, root_dir: Path, tmproot: Path, public_di
         
         # Generate HTML with lwarp in job directory
         subprocess.run(
-            ['lwarpmk', 'html', '-p', base_name],
+            ['lwarpmk', 'html'],
             check=True
         )
         
         # Clean up intermediate files
         subprocess.run(
-            ['lwarpmk', 'clean', '-p', base_name],
+            ['lwarpmk', 'clean'],
             check=False  # Don't fail if clean fails
         )
         

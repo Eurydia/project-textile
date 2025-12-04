@@ -61,10 +61,11 @@ jobs:
                 lwarpmk html -p "$base"
                 
                 mkdir -p "$ROOT/$src_dir"
-                
-                find . -maxdepth 1 -type f -name '*_html.html' -exec cp {} "$ROOT/$src_dir/" \;
-                
+
                 lwarpmk clean -p "$base" || true
+                
+                find . -maxdepth 1 -type f -name '*.html' -exec cp {} "$ROOT/$src_dir/" \;
+                
               done
 
       - name: Upload HTML artifacts

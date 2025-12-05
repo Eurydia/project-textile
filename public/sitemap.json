@@ -8,5 +8,27 @@
       ]
     }
   ],
-  "ongoing": []
+  "ongoing": [
+    {
+      "title": "First Test Document",
+      "path": [
+        "ongoing",
+        "doc1.html"
+      ]
+    },
+    {
+      "title": "First Test Document",
+      "path": [
+        "ongoing",
+        "doc1c.html"
+      ]
+    },
+    {
+      "title": "First Test Document",
+      "path": [
+        "ongoing",
+        "docd.html"
+      ]
+    }
+  ]
 }

@@ -1,0 +1,1 @@
+- Name of TeX document cannot contain a space or special characters.

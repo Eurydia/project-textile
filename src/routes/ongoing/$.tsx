@@ -1,9 +1,8 @@
-import { typesetMath } from '@/mathjax'
+import { useInjectScripts } from '@/hooks/useInjectScripts'
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
 
-export const Route = createFileRoute('/')({
-  component: App,
+export const Route = createFileRoute('/ongoing/$')({
+  component: RouteComponent,
   loader: async ({ context: { getBodyContent, getHeadContent } }) => {
     const html = await fetch('/content/index.html').then((r) => r.text())
     return { body: getBodyContent(html), head: getHeadContent(html) }
@@ -13,11 +12,9 @@ export const Route = createFileRoute('/')({
   }),
 })
 
-function App() {
+function RouteComponent() {
   const { body, head } = Route.useLoaderData()
-  useEffect(() => {
-    typesetMath(document.getElementById('app'))
-  }, [])
+  useInjectScripts(head.scripts)
 
   return <div dangerouslySetInnerHTML={{ __html: body }}></div>
 }

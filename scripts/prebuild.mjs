@@ -1,5 +1,7 @@
+import { globbySync } from 'globby'
+import { JSDOM } from 'jsdom'
+import { spawnSync } from 'node:child_process'
 import {
-  copyFileSync,
   cpSync,
   existsSync,
   mkdirSync,
@@ -7,87 +9,60 @@ import {
   rmSync,
   writeFileSync,
 } from 'node:fs'
-import { posix, relative } from 'node:path'
-import { basename } from 'node:path/posix'
-import { spawnSync } from 'node:child_process'
-import { globbySync } from 'globby'
-import { JSDOM } from 'jsdom'
+import path, { basename, join, relative } from 'node:path'
 
-const contentDir = posix.join(process.cwd(), 'content')
-const tempDir = posix.join(contentDir, 'temp')
+const contentDir = join(process.cwd(), 'content')
+const tempDir = join(contentDir, 'temp')
+const pubDir = join(process.cwd(), 'public')
 
 if (existsSync(tempDir)) {
   rmSync(tempDir, { force: true, recursive: true })
 }
 mkdirSync(tempDir)
-cpSync(posix.join(contentDir, 'figures'), posix.join(tempDir, 'figures'), {
+cpSync(join(contentDir, 'figures'), join(tempDir, 'figures'), {
   recursive: true,
 })
-for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
-  ignore: [posix.join(contentDir, 'temp', '**')],
+
+for (const blog of globbySync('./content/**/*.tex', {
+  ignore: ['content/temp/**'],
 })) {
-  const sg = relative(process.cwd(), blog).split(posix.sep).slice(1)
-  const bname = sg.at(-1)
-  const stem = basename(bname, '.tex')
-  sg.pop()
-  const workingDir = posix.join(tempDir, ...sg, stem)
+  const segments = relative(process.cwd(), blog).split(path.sep).slice(1, -1)
+  const name = basename(blog)
+  console.log(segments, name)
 
-  mkdirSync(workingDir, { recursive: true })
-  copyFileSync(blog, posix.join(workingDir, bname))
+  const workingDir = join(tempDir, ...segments)
 
-  spawnSync('pdflatex', [bname, '-interaction=nonstepmode', '-halt-on-error'], {
+  cpSync(blog, join(workingDir, name), { recursive: true })
+  spawnSync('pdflatex', [name, '-interaction=nonstopmode', '-halt-on-error'], {
     cwd: workingDir,
   })
   spawnSync('lwarpmk', ['html'], { cwd: workingDir })
-  spawnSync('lwarpmk', ['clean'], { cwd: workingDir })
 
-  const publicDir = posix.join(process.cwd(), 'public', 'content', ...sg)
-  if (!existsSync(publicDir)) {
-    mkdirSync(publicDir, { recursive: true })
-  }
-  const htmlPath = posix.join(workingDir, `${stem}.html`)
+  const stem = basename(name, '.tex')
+  const htmlPath = join(workingDir, `${stem}.html`)
   if (!existsSync(htmlPath)) {
-    spawnSync('ls', ['-lha'], { cwd: workingDir, stdio: 'inherit' })
     console.debug('!!!!!!!!!!!!!!! No html generated')
     continue
   }
-  copyFileSync(htmlPath, posix.join(publicDir, `${stem}.html`))
+  mkdirSync(join(pubDir, 'content', ...segments), { recursive: true })
+  cpSync(htmlPath, join(pubDir, 'content', ...segments, `${stem}.html`))
+  spawnSync('lwarpmk', ['cleanall'], { cwd: workingDir })
 }
 
-cpSync(
-  posix.join(contentDir, 'figures'),
-  posix.join(process.cwd(), 'public', 'content', 'figures'),
-  {
-    recursive: true,
-  },
-)
-
-const sitemap= {}
-
-for (const dir of ['publications', 'ongoing']) {
-  sitemap[dir] = []
-
-  for (const blog of globbySync(
-    posix.join(process.cwd(), 'public', 'content', dir),
-  )) {
-    const rawHtml = readFileSync(blog, 'utf-8')
-    const doc = new JSDOM(rawHtml).window.document
-    const title = doc.querySelector('title')?.textContent || 'No Title'
-
-    const blogPath = relative(
-      posix.join(process.cwd(), 'public', 'content'),
-      blog,
-    ).split(posix.sep)
-
-    sitemap[dir].push({
-      title,
-      path: blogPath,
-    })
-  }
-}
+cpSync(join(contentDir, 'figures'), join(pubDir, 'content', 'figures'), {
+  recursive: true,
+})
 
 writeFileSync(
-  posix.join(process.cwd(), 'public', 'sitemap.json'),
-  JSON.stringify(sitemap, null, 2),
+  join(pubDir, 'sitemap.json'),
+  JSON.stringify(
+    globbySync('./public/content/**/*.html').map((p) => {
+      const dom = new JSDOM(readFileSync(p))
+      return {
+        path: relative(join(pubDir, 'content'), p).split(path.sep),
+        title: dom.window.document.title,
+      }
+    }),
+  ),
   { flag: 'w+' },
 )

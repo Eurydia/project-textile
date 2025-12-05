@@ -27,7 +27,7 @@ for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   ignore: [posix.join(contentDir, 'temp', '**')],
 })) {
   const sg = relative(process.cwd(), blog).split(posix.sep).slice(1)
-  const bname = sg.at(-1)!
+  const bname = sg.at(-1)
   const stem = basename(bname, '.tex')
   sg.pop()
   const workingDir = posix.join(tempDir, ...sg, stem)
@@ -62,10 +62,7 @@ cpSync(
   },
 )
 
-const sitemap: Record<
-  string,
-  Array<{ title: string; path: Array<string> }>
-> = {}
+const sitemap= {}
 
 for (const dir of ['publications', 'ongoing']) {
   sitemap[dir] = []

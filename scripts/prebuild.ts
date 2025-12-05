@@ -34,7 +34,7 @@ for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   spawnSync('pdflatex', [bname, '-interaction=nonstepmode', '-halt-on-error'], {
     cwd: workingDir,
   })
-  spawnSync('lwarpmk', ['html'], { cwd: workingDir })
+  spawnSync('lwarpmk', ['html'], { cwd: workingDir, stdio: 'inherit' })
   spawnSync('lwarpmk', ['clean'], { cwd: workingDir })
 
   const publicDir = posix.join(process.cwd(), 'public', 'content', ...sg)

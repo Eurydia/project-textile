@@ -1,1 +1,0 @@
-import{x as t,j as e}from"./index-BLL2sIKy.js";import{u as n}from"./useInjectScripts-nFcTVrfo.js";function a(){const{body:o}=t.useLoaderData();return n(),e.jsx("div",{dangerouslySetInnerHTML:{__html:o}})}export{a as component};

@@ -3,6 +3,9 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
+  rmSync,
+  rmdir,
+  rmdirSync,
   writeFileSync,
 } from 'node:fs'
 import { posix, relative } from 'node:path'
@@ -14,6 +17,9 @@ import { JSDOM } from 'jsdom'
 const contentDir = posix.join(process.cwd(), 'content')
 const tempDir = posix.join(contentDir, 'temp')
 
+if (existsSync(tempDir)) {
+  rmSync(tempDir, { force: true, recursive: true })
+}
 mkdirSync(tempDir)
 for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   ignore: [posix.join(contentDir, 'temp', '**')],
@@ -31,6 +37,12 @@ for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   spawnSync('pdflatex', [bname], { cwd: workingDir })
   spawnSync('lwarpmk', ['html'], { cwd: workingDir })
   spawnSync('lwarpmk', ['clean'], { cwd: workingDir })
+
+  const result = spawnSync('ls', ['-la'], { cwd: workingDir }) // command + args
+  console.log(result.status) // exit code
+  console.log(result.stdout.toString())
+  console.log(result.stderr.toString())
+  console.log(result.error) // Error object if spawn failed
 
   const publicDir = posix.join(process.cwd(), 'public', 'content', ...sg)
   if (!existsSync(publicDir)) {

@@ -4,9 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
-    "prebuild": "node --import=tsx scripts/prebuild.ts",
+    "prepare": "node --import=tsx scripts/prebuild.ts",
     "build": "vite build && tsc",
-    "postbuild": "gh-pages -d build",
+    "deploy": "gh-pages -d build",
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",

@@ -1,49 +1,84 @@
-import { useInjectScripts } from '@/hooks/useInjectScripts'
-import { Box, Card, CardContent, Divider, Grid, Stack } from '@mui/material'
+import { useTypesetOnLoad } from '@/hooks/useInjectScripts'
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Chip,
+  Divider,
+  ImageList,
+  ImageListItem,
+  Stack,
+} from '@mui/material'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/ongoing/')({
   component: RouteComponent,
-  loader: async ({ context: { getBodyContent, getHeadContent } }) => {
+  loader: async ({ context: { getBodyContent, siteBlogs } }) => {
     const html = await fetch('/content/ongoing/index.html').then((r) =>
       r.text(),
     )
-    return { body: getBodyContent(html), head: getHeadContent(html) }
+    return { body: getBodyContent(html) }
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: loaderData?.head.title }],
+  head: () => ({
+    meta: [{ title: 'Ongoing Research' }],
   }),
 })
 
 function RouteComponent() {
   const { siteBlogs } = Route.useRouteContext()
-  const { body, head } = Route.useLoaderData()
-  useInjectScripts(head.scripts)
+  const { body } = Route.useLoaderData()
+  useTypesetOnLoad()
 
+  console.debug(body)
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} divider={<Divider flexItem />}>
       <Box component="div" dangerouslySetInnerHTML={{ __html: body }}></Box>
-      <Divider flexItem />
-      <Grid container spacing={2}>
+
+      <ImageList variant="masonry">
         {siteBlogs
-          .filter((p) => p.path.length > 0 && p.path[0] === 'ongoing')
+          .filter(
+            (p) =>
+              p.path.length > 0 &&
+              p.path[0] === 'ongoing' &&
+              p.path.at(-1) !== 'index.html',
+          )
           .map((to, i) => {
             return (
-              <Grid size={{ md: 6, sm: 12 }} key={i}>
+              <ImageListItem key={i}>
                 <Card variant="outlined">
-                  <CardContent>
+                  <CardHeader
+                    title={to.title}
+                    action={
+                      <Chip
+                        label="Ongoing"
+                        variant="outlined"
+                        color="success"
+                      />
+                    }
+                  />
+                  <CardContent
+                    sx={{
+                      overflow: 'hidden',
+                      maxHeight: 'calc(1.4em * 3)',
+                    }}
+                  >
+                    {to.abstract ?? ''}
+                  </CardContent>
+                  <CardActions>
                     <Link
-                      to={'/ongoing/$'}
+                      to="/ongoing/$"
                       params={{ _splat: to.path.slice(1).join('/') }}
                     >
-                      {to.title}
+                      More
                     </Link>
-                  </CardContent>
+                  </CardActions>
                 </Card>
-              </Grid>
+              </ImageListItem>
             )
           })}
-      </Grid>
+      </ImageList>
     </Stack>
   )
 }

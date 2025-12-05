@@ -1,49 +1,136 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[11pt]{article}
 \usepackage[mathjax]{lwarp}
-\usepackage[margin=2cm]{geometry}
-\usepackage{graphicx}
-\usepackage{array}
-\usepackage{hyperref}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{lipsum}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Ongoing Research Index Page}
+\author{A. U. Thor}
+\date{\today}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
 
 \begin{document}
-\thispagestyle{empty}
+\maketitle
 
-\begin{tabular}{@{}p{0.65\linewidth} p{0.3\linewidth}@{}}
-  % Left: name and contact info
-  \begin{minipage}[t]{\linewidth}
-    {\LARGE\bfseries Your Name}\\[0.3em]
-    \textit{Your Title / Position}\\[0.8em]
+\begin{abstract}
+Optionally, use this document to provide optional information.
+\end{abstract}
 
-    \begin{tabular}{@{}ll@{}}
-      Email: & \href{mailto:you@example.com}{you@example.com} \\
-      Phone: & +00 000 000 000 \\
-      Web:   & \href{https://example.com}{example.com} \\
-      Addr:  & Street 1, City, Country \\
-    \end{tabular}
-  \end{minipage}
-  &
-  % Right: image from ../figures/
-  \begin{minipage}[t]{\linewidth}
-    \centering
-    \includegraphics[width=3cm,height=3cm,keepaspectratio]{../figures/placeholder1.jpg}\\[0.5em]
-    {\small\itshape Your photo}
-  \end{minipage}
-\end{tabular}
+\section{Introduction}
+\lipsum[2]
 
-\vspace{1.5cm}
+We consider a function $f \colon \mathbb{R} \to \mathbb{R}$.
+Basic inline examples include $e^{i\pi} + 1 = 0$ and
+$\int_0^1 x^2\,dx = \tfrac{1}{3}$.
 
-\section*{Profile}
-Short 2–3 sentence summary about you.
+\section{Basic Equations}
+A numbered equation:
+\begin{equation}
+  \nabla \cdot \mathbf{E} = \frac{\rho}{\varepsilon_0}.
+\end{equation}
 
-\section*{Experience}
-\textbf{Job Title} \hfill 2023--Present\\
-Company Name, City\\
-\begin{itemize}
-  \item Bullet point describing what you did.
-  \item Another bullet point.
-\end{itemize}
+An aligned system using \texttt{amsmath}:
+\begin{align}
+  a^2 + b^2 &= c^2, \label{eq:pythagoras} \\
+  (a+b)^2 &= a^2 + 2ab + b^2. \label{eq:binomial}
+\end{align}
 
-\section*{Education}
-\textbf{Degree}, University Name \hfill 2019--2023
+We also write a general $n$th-degree polynomial:
+\begin{equation}
+  p(x) = \sum_{k=0}^{n} a_k x^k,
+\end{equation}
+where $a_k \in \mathbb{R}$ for all $k$.
+
+\section{Piecewise Functions and Matrices}
+Using \texttt{cases}:
+\begin{equation}
+f(x) =
+\begin{cases}
+  x^2, & x \ge 0, \\
+  -x,  & x < 0.
+\end{cases}
+\end{equation}
+
+A matrix and its determinant:
+\begin{equation}
+A =
+\begin{bmatrix}
+  1 & 2 & 3 \\
+  0 & 1 & 4 \\
+  0 & 0 & 1
+\end{bmatrix},
+\qquad
+\det(A) = 1.
+\end{equation}
+
+A small system in augmented-matrix form:
+\begin{equation}
+\begin{bmatrix}
+  1 & 1 & \vline & 2 \\
+  2 & -1 & \vline & 0
+\end{bmatrix}
+\sim
+\begin{bmatrix}
+  1 & 0 & \vline & \tfrac{2}{3} \\
+  0 & 1 & \vline & \tfrac{4}{3}
+\end{bmatrix}.
+\end{equation}
+
+\section{Theorems and Proof Sketches}
+\begin{theorem}[Sample Inequality]
+For all $x,y \in \mathbb{R}$,
+\[
+  (x-y)^2 \ge 0.
+\]
+\end{theorem}
+
+\begin{proof}
+Expanding the square,
+\[
+  (x-y)^2 = x^2 - 2xy + y^2.
+\]
+By the rearrangement,
+\[
+  x^2 - 2xy + y^2 = (x-y)^2,
+\]
+which is a square of a real number and hence nonnegative.
+\end{proof}
+
+\begin{lemma}
+Let $x \in \mathbb{R}$. Then
+\[
+  \cos^2 x + \sin^2 x = 1.
+\]
+\end{lemma}
+
+\begin{proof}
+\lipsum[3]
+\end{proof}
+
+\section{More Lorem Ipsum with Inline Math}
+\lipsum[4]
+
+Here is some inline math inside lorem ipsum:
+\lipsum[5]
+
+We also use \texttt{mathtools} for a nicely aligned relation:
+\begin{equation}
+  \begin{aligned}
+    f(x) &\coloneqq x^3 - 3x + 1, \\
+    f'(x) &= 3x^2 - 3, \\
+    f''(x) &= 6x.
+  \end{aligned}
+\end{equation}
+
+\section{Conclusion}
+\lipsum[6]
+
+The key relation is summarized as
+\begin{equation}
+  \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n = e.
+\end{equation}
 
 \end{document}

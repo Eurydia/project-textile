@@ -4,20 +4,21 @@ import { useEffect } from 'react'
 
 export const Route = createFileRoute('/')({
   component: App,
-  loader: async ({ context: { getBodyContent, getHeadContent } }) => {
+  loader: async ({ context: { getBodyContent } }) => {
     const html = await fetch('/content/index.html').then((r) => r.text())
-    return { body: getBodyContent(html), head: getHeadContent(html) }
+    return { body: getBodyContent(html) }
   },
-  head: ({ loaderData }) => ({
-    meta: [{ title: loaderData?.head.title }],
+  head: () => ({
+    meta: [{ title: 'Home' }],
   }),
 })
 
 function App() {
-  const { body, head } = Route.useLoaderData()
+  const { body } = Route.useLoaderData()
   useEffect(() => {
-    typesetMath(document.getElementById('app'))
+    ;(async () => {
+      await typesetMath()
+    })()
   }, [])
-
   return <div dangerouslySetInnerHTML={{ __html: body }}></div>
 }

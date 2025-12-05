@@ -9,7 +9,7 @@
     />
     <title>Personal Blog | Textile</title>
     <link rel="stylesheet" href="/lwarp.css" />
-    <script defer>
+    <script>
       // Lwarp MathJax emulation code
       //
       // Based on code by Davide P. Cervone.
@@ -23,15 +23,14 @@
       // subequations? is 0 usually, 1 if inside subequations.
       // section is a string printed as-is, or empty.
       // number is auto-incremented by MathJax between equations.
-      //
       MathJax = {
         subequations: '0',
         section: '',
         loader: {
           load: ['[tex]/tagformat', '[tex]/textmacros'],
         },
-        typeset: false,
         startup: {
+          typeset: false,
           ready() {
             // These would be replaced by import commands if you wanted to make
             // a proper extension.
@@ -252,7 +251,6 @@
       }
     </script>
     <script
-      defer
       id="MathJax-script"
       src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
     ></script>

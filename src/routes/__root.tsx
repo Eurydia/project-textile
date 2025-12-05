@@ -17,22 +17,6 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
-const getHeadContent = (html: string) => {
-  const parser = new DOMParser()
-  const dom = parser.parseFromString(html, 'text/html')
-
-  const title = dom.querySelector('title')?.innerText ?? ''
-  const scripts = [...dom.querySelectorAll('script')].map(
-    ({ src, innerText }) => ({
-      src: src || undefined,
-      children: innerText || undefined,
-    }),
-  )
-  console.debug(scripts)
-
-  return { title, scripts }
-}
-
 const getBodyContent = (html: string) => {
   const parser = new DOMParser()
   const dom = parser.parseFromString(html, 'text/html')
@@ -70,14 +54,20 @@ const getBodyContent = (html: string) => {
 
 export const Route = createRootRoute({
   beforeLoad: async () => {
-    const siteBlogs: Array<{ path: string[]; title: string }> = await fetch(
-      '/sitemap.json',
-    ).then((r) => r.json())
-
+    const siteBlogs: Array<{
+      path: string[]
+      title: string
+      abstract?: string
+    }> = await fetch('/sitemap.json').then((r) => r.json())
+    const siteMap = Object.fromEntries(
+      siteBlogs.map((v) => {
+        return ['/' + v.path.join('/').replace(/.html$/, ''), v]
+      }),
+    )
     return {
+      siteMap,
       siteBlogs,
       getBodyContent,
-      getHeadContent,
     }
   },
   component: () => (

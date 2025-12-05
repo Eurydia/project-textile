@@ -36,7 +36,7 @@ for (const blog of globbySync('./content/**/*.tex', {
   spawnSync('pdflatex', [name, '-interaction=nonstopmode', '-halt-on-error'], {
     cwd: workingDir,
   })
-  spawnSync('lwarpmk', ['html'], { cwd: workingDir })
+  spawnSync('lwarpmk', ['html'], { cwd: workingDir, stdio: 'inherit' })
 
   const stem = basename(name, '.tex')
   const htmlPath = join(workingDir, `${stem}.html`)
@@ -58,9 +58,11 @@ writeFileSync(
   JSON.stringify(
     globbySync('./public/content/**/*.html').map((p) => {
       const dom = new JSDOM(readFileSync(p))
+      const abstract = dom.window.document.body.querySelector('.abstract > p')
       return {
         path: relative(join(pubDir, 'content'), p).split(path.sep),
         title: dom.window.document.title,
+        abstract: abstract === null ? undefined : abstract.textContent,
       }
     }),
   ),

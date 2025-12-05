@@ -1,9 +1,67 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { useTypesetOnLoad } from '@/hooks/useInjectScripts'
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Divider,
+  ImageList,
+  ImageListItem,
+  Stack,
+} from '@mui/material'
+import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/publications/')({
   component: RouteComponent,
+  loader: async ({ context: { getBodyContent } }) => {
+    const html = await fetch('/content/publications/index.html').then((r) =>
+      r.text(),
+    )
+    return { body: getBodyContent(html) }
+  },
+  head: () => ({
+    meta: [{ title: 'Publications' }],
+  }),
 })
 
 function RouteComponent() {
-  return <div>Hello "/_blogs/publications/"!</div>
+  const { siteBlogs } = Route.useRouteContext()
+  const { body } = Route.useLoaderData()
+  useTypesetOnLoad()
+
+  console.debug(body)
+  return (
+    <Stack spacing={2} divider={<Divider flexItem />}>
+      <Box component="div" dangerouslySetInnerHTML={{ __html: body }}></Box>
+
+      <ImageList variant="masonry">
+        {siteBlogs
+          .filter(
+            (p) =>
+              p.path.length > 0 &&
+              p.path[0] === 'publications' &&
+              p.path.at(-1) !== 'index.html',
+          )
+          .map((to, i) => {
+            return (
+              <ImageListItem key={i}>
+                <Card variant="outlined">
+                  <CardHeader title={to.title} />
+                  <CardContent>{to.abstract ?? ''}</CardContent>
+                  <CardActions>
+                    <Link
+                      to="/publication"
+                      params={{ _splat: to.path.slice(1).join('/') }}
+                    >
+                      More
+                    </Link>
+                  </CardActions>
+                </Card>
+              </ImageListItem>
+            )
+          })}
+      </ImageList>
+    </Stack>
+  )
 }

@@ -5,7 +5,7 @@ import {
   readFileSync,
   writeFileSync,
 } from 'node:fs'
-import { posix } from 'node:path'
+import { posix, relative } from 'node:path'
 import { basename } from 'node:path/posix'
 import { spawnSync } from 'node:child_process'
 import { globbySync } from 'globby'
@@ -19,8 +19,8 @@ mkdirSync(tempDir)
 for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   ignore: [posix.join(contentDir, 'temp', '**')],
 })) {
-  console.debug(blog)
-  const sg = blog.split(posix.sep).slice(1)
+  console.debug(relative(contentDir, blog))
+  const sg = relative(contentDir, blog).split(posix.sep).slice(1)
   const bname = sg.at(-1)!
   const stem = basename(bname, '.tex')
   sg.pop()

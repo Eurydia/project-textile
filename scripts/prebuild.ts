@@ -1,5 +1,6 @@
 import {
   copyFileSync,
+  cpSync,
   existsSync,
   mkdirSync,
   readFileSync,
@@ -19,6 +20,9 @@ if (existsSync(tempDir)) {
   rmSync(tempDir, { force: true, recursive: true })
 }
 mkdirSync(tempDir)
+cpSync(posix.join(contentDir, 'figures'), posix.join(tempDir, 'figures'), {
+  recursive: true,
+})
 for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   ignore: [posix.join(contentDir, 'temp', '**')],
 })) {
@@ -49,6 +53,14 @@ for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   }
   copyFileSync(htmlPath, posix.join(publicDir, `${stem}.html`))
 }
+
+cpSync(
+  posix.join(contentDir, 'figures'),
+  posix.join(process.cwd(), 'public', 'content', 'figures'),
+  {
+    recursive: true,
+  },
+)
 
 const sitemap: Record<
   string,

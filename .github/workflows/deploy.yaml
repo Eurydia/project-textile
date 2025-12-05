@@ -41,9 +41,12 @@ jobs:
       - name: mkdir content/temp
         run: mkdir content/temp
 
+      - name: mkdir content/temp
+        run: mkdir content/temp
+
       - name: Run prebuild (pdflatex / lwarp / etc.)
         run: npm run prebuild
-        
+
 
       - name: Build Vite app
         run: npm run build

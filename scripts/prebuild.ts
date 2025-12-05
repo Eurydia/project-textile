@@ -3,7 +3,6 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
-  rmSync,
   writeFileSync,
 } from 'node:fs'
 import { posix } from 'node:path'
@@ -12,10 +11,11 @@ import { spawnSync } from 'node:child_process'
 import { globbySync } from 'globby'
 import { JSDOM } from 'jsdom'
 
-const contentDir = posix.join(posix.dirname(process.cwd()), 'content')
+const contentDir = posix.join(process.cwd(), 'content')
 const tempDir = posix.join(contentDir, 'temp')
 console.debug(tempDir)
 
+mkdirSync(tempDir)
 for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   ignore: [posix.join(contentDir, 'temp', '**')],
 })) {
@@ -56,7 +56,7 @@ for (const dir of ['publications', 'ongoing']) {
   sitemap[dir] = []
 
   for (const blog of globbySync(
-    posix.join(posix.dirname(process.cwd()), 'public', 'content', dir),
+    posix.join(process.cwd(), 'public', 'content', dir),
   )) {
     const rawHtml = readFileSync(blog, 'utf-8')
     const dom = new JSDOM(rawHtml)
@@ -71,7 +71,7 @@ for (const dir of ['publications', 'ongoing']) {
 }
 
 writeFileSync(
-  posix.join(posix.dirname(process.cwd()), 'public', 'sitemap.json'),
+  posix.join(process.cwd(), 'public', 'sitemap.json'),
   JSON.stringify(sitemap, null, 2),
   { flag: 'w+' },
 )

@@ -32,6 +32,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: DEBUG
+        run: ls -lh
+
       - name: Run prebuild (pdflatex / lwarp / etc.)
         run: npm run prebuild
 

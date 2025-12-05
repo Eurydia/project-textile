@@ -62,10 +62,14 @@ for (const dir of ['publications', 'ongoing']) {
     posix.join(process.cwd(), 'public', 'content', dir),
   )) {
     const rawHtml = readFileSync(blog, 'utf-8')
-    const dom = new JSDOM(rawHtml)
-    const doc = dom.window.document
+    const doc = new JSDOM(rawHtml).window.document
     const title = doc.querySelector('title')?.textContent || 'No Title'
-    const blogPath = blog.split(posix.sep)
+
+    const blogPath = relative(
+      posix.join(process.cwd(), 'public', 'content'),
+      blog,
+    ).split(posix.sep)
+
     sitemap[dir].push({
       title,
       path: blogPath.slice(2),

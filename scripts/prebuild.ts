@@ -14,6 +14,14 @@ import { spawnSync } from 'node:child_process'
 import { globbySync } from 'globby'
 import { JSDOM } from 'jsdom'
 
+function runSync(cmd: string, args: Array<string> = [], opt: any = {}) {
+  const result = spawnSync(cmd, args, opt)
+  console.log(result.status) // exit code
+  console.log(result.stdout.toString())
+  console.log(result.stderr.toString())
+  console.log(result.error) // Error object if spawn failed
+}
+
 const contentDir = posix.join(process.cwd(), 'content')
 const tempDir = posix.join(contentDir, 'temp')
 
@@ -34,15 +42,10 @@ for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   mkdirSync(workingDir, { recursive: true })
   copyFileSync(blog, posix.join(workingDir, bname))
 
-  spawnSync('pdflatex', [bname], { cwd: workingDir })
-  spawnSync('lwarpmk', ['html'], { cwd: workingDir })
-  spawnSync('lwarpmk', ['clean'], { cwd: workingDir })
-
-  const result = spawnSync('ls', ['-la'], { cwd: workingDir }) // command + args
-  console.log(result.status) // exit code
-  console.log(result.stdout.toString())
-  console.log(result.stderr.toString())
-  console.log(result.error) // Error object if spawn failed
+  runSync('pdflatex', [bname], { cwd: workingDir })
+  runSync('lwarpmk', ['html'], { cwd: workingDir })
+  runSync('lwarpmk', ['clean'], { cwd: workingDir })
+  runSync('ls', ['-la'], { cwd: workingDir })
 
   const publicDir = posix.join(process.cwd(), 'public', 'content', ...sg)
   if (!existsSync(publicDir)) {

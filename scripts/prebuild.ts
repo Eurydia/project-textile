@@ -29,27 +29,24 @@ for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   const stem = basename(bname, '.tex')
   sg.pop()
   const workingDir = posix.join(tempDir, ...sg, stem)
-  console.debug('!!!!')
-  console.debug(workingDir)
-  console.debug(blog)
-  console.debug(posix.join(workingDir, bname))
 
   mkdirSync(workingDir, { recursive: true })
   copyFileSync(blog, posix.join(workingDir, bname))
-  spawnSync('ls', ['-lha'], { cwd: workingDir, stdio: 'inherit' })
-  spawnSync('pdflatex', [bname], { cwd: workingDir, stdio: 'inherit' })
-  // runSync('lwarpmk', ['html'], { cwd: workingDir })
-  // runSync('lwarpmk', ['clean'], { cwd: workingDir })
-  // runSync('ls', ['-la'], { cwd: workingDir })
+
+  spawnSync('pdflatex', [bname, '-interaction=nonstepmode', '-halt-on-error'], {
+    cwd: workingDir,
+  })
+  spawnSync('lwarpmk', ['html'], { cwd: workingDir })
+  spawnSync('lwarpmk', ['clean'], { cwd: workingDir })
 
   const publicDir = posix.join(process.cwd(), 'public', 'content', ...sg)
   if (!existsSync(publicDir)) {
     mkdirSync(publicDir, { recursive: true })
   }
-  copyFileSync(
-    posix.join(workingDir, `${stem}.html`),
-    posix.join(publicDir, `${stem}.html`),
-  )
+  // copyFileSync(
+  //   posix.join(workingDir, `${stem}.html`),
+  //   posix.join(publicDir, `${stem}.html`),
+  // )
 }
 
 const sitemap: Record<

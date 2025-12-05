@@ -72,7 +72,7 @@ for (const dir of ['publications', 'ongoing']) {
 
     sitemap[dir].push({
       title,
-      path: blogPath.slice(2),
+      path: blogPath,
     })
   }
 }

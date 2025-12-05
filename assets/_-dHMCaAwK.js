@@ -1,0 +1,1 @@
+import{x as t,j as e}from"./index-B_psN4oc.js";import{u as n}from"./useInjectScripts-BR5kgXtc.js";function a(){const{body:o}=t.useLoaderData();return n(),e.jsx("div",{dangerouslySetInnerHTML:{__html:o}})}export{a as component};

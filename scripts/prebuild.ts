@@ -12,10 +12,6 @@ import { spawnSync } from 'node:child_process'
 import { globbySync } from 'globby'
 import { JSDOM } from 'jsdom'
 
-console.debug(process.cwd())
-
-spawnSync('ls')
-
 const contentDir = posix.join(posix.dirname(process.cwd()), 'content')
 const tempDir = posix.join(contentDir, 'temp')
 

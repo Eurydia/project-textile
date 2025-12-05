@@ -6,7 +6,7 @@
     "dev": "vite --port 3000",
     "prepare": "node scripts/prebuild.mjs",
     "build": "vite build && tsc",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d dist",
     "serve": "vite preview",
     "test": "vitest run",
     "lint": "eslint",

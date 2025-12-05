@@ -15,10 +15,14 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 export const Route = createFileRoute('/publications/')({
   component: RouteComponent,
   loader: async ({ context: { getBodyContent } }) => {
-    const html = await fetch('/content/publications/index.html').then((r) =>
-      r.text(),
+    const items: Record<string, { default: string }> = import.meta.glob(
+      '@/site/content/publications/index.html',
+      {
+        eager: true,
+        query: '?raw',
+      },
     )
-    return { body: getBodyContent(html) }
+    return { body: getBodyContent(Object.values(items)[0].default) }
   },
   head: () => ({
     meta: [{ title: 'Publications' }],

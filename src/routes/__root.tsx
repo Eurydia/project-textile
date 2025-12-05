@@ -1,3 +1,4 @@
+import siteBlogs from '@/site/sitemap.json'
 import { MainTheme } from '@/theme'
 import {
   AppBar,
@@ -16,7 +17,6 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-
 const getBodyContent = (html: string) => {
   const parser = new DOMParser()
   const dom = parser.parseFromString(html, 'text/html')
@@ -54,11 +54,6 @@ const getBodyContent = (html: string) => {
 
 export const Route = createRootRoute({
   beforeLoad: async () => {
-    const siteBlogs: Array<{
-      path: string[]
-      title: string
-      abstract?: string
-    }> = await fetch('/sitemap.json').then((r) => r.json())
     const siteMap = Object.fromEntries(
       siteBlogs.map((v) => {
         return ['/' + v.path.join('/'), v]

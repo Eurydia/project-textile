@@ -7,13 +7,17 @@ export const Route = createFileRoute('/publications/$')({
     context: { getBodyContent, siteMap },
     params: { _splat },
   }) => {
-    console.debug(_splat)
-    const html = await fetch(`/content/publications/${_splat}`).then((r) =>
-      r.text(),
+    const items: Record<string, { default: string }> = import.meta.glob(
+      `@/site/content/publications/*.html`,
+      {
+        eager: true,
+        query: '?raw',
+      },
     )
-
     return {
-      body: getBodyContent(html),
+      body: getBodyContent(
+        items[`/src/site/content/publications/${_splat}`].default,
+      ),
       title: siteMap[`/publications/${_splat}`].title,
     }
   },

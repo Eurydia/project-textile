@@ -4,8 +4,14 @@ import { createFileRoute } from '@tanstack/react-router'
 export const Route = createFileRoute('/')({
   component: App,
   loader: async ({ context: { getBodyContent } }) => {
-    const html = await fetch('/content/index.html').then((r) => r.text())
-    return { body: getBodyContent(html) }
+    const items: Record<string, { default: string }> = import.meta.glob(
+      '@/site/content/index.html',
+      {
+        eager: true,
+        query: '?raw',
+      },
+    )
+    return { body: getBodyContent(Object.values(items)[0].default) }
   },
   head: () => ({
     meta: [{ title: 'Home' }],

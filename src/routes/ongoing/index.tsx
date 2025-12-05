@@ -16,10 +16,14 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 export const Route = createFileRoute('/ongoing/')({
   component: RouteComponent,
   loader: async ({ context: { getBodyContent } }) => {
-    const html = await fetch('/content/ongoing/index.html').then((r) =>
-      r.text(),
+    const items: Record<string, { default: string }> = import.meta.glob(
+      '@/site/content/ongoing/index.html',
+      {
+        eager: true,
+        query: '?raw',
+      },
     )
-    return { body: getBodyContent(html) }
+    return { body: getBodyContent(Object.values(items)[0].default) }
   },
   head: () => ({
     meta: [{ title: 'Ongoing Research' }],
@@ -31,7 +35,6 @@ function RouteComponent() {
   const { body } = Route.useLoaderData()
   useTypesetOnLoad()
 
-  console.debug(body)
   return (
     <Stack spacing={2} divider={<Divider flexItem />}>
       <Box component="div" dangerouslySetInnerHTML={{ __html: body }}></Box>

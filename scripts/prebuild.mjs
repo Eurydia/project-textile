@@ -13,7 +13,7 @@ import path, { basename, join, relative } from 'node:path'
 
 const contentDir = join(process.cwd(), 'content')
 const tempDir = join(contentDir, 'temp')
-const pubDir = join(process.cwd(), 'public')
+const assetDir = join(process.cwd(), 'src', 'site')
 
 if (existsSync(tempDir)) {
   rmSync(tempDir, { force: true, recursive: true })
@@ -36,7 +36,7 @@ for (const blog of globbySync('./content/**/*.tex', {
   spawnSync('pdflatex', [name, '-interaction=nonstopmode', '-halt-on-error'], {
     cwd: workingDir,
   })
-  spawnSync('lwarpmk', ['html'], { cwd: workingDir, stdio: 'inherit' })
+  spawnSync('lwarpmk', ['html'], { cwd: workingDir })
 
   const stem = basename(name, '.tex')
   const htmlPath = join(workingDir, `${stem}.html`)
@@ -44,23 +44,23 @@ for (const blog of globbySync('./content/**/*.tex', {
     console.debug('!!!!!!!!!!!!!!! No html generated')
     continue
   }
-  mkdirSync(join(pubDir, 'content', ...segments), { recursive: true })
-  cpSync(htmlPath, join(pubDir, 'content', ...segments, `${stem}.html`))
+  mkdirSync(join(assetDir, 'content', ...segments), { recursive: true })
+  cpSync(htmlPath, join(assetDir, 'content', ...segments, `${stem}.html`))
   spawnSync('lwarpmk', ['cleanall'], { cwd: workingDir })
 }
 
-cpSync(join(contentDir, 'figures'), join(pubDir, 'content', 'figures'), {
+cpSync(join(contentDir, 'figures'), join(assetDir, 'content', 'figures'), {
   recursive: true,
 })
 
 writeFileSync(
-  join(pubDir, 'sitemap.json'),
+  join(assetDir, 'sitemap.json'),
   JSON.stringify(
-    globbySync('./public/content/**/*.html').map((p) => {
+    globbySync('./src/site/content/**/*.html').map((p) => {
       const dom = new JSDOM(readFileSync(p))
       const abstract = dom.window.document.body.querySelector('.abstract > p')
       return {
-        path: relative(join(pubDir, 'content'), p).split(path.sep),
+        path: relative(join(assetDir, 'content'), p).split(path.sep),
         title: dom.window.document.title,
         abstract: abstract === null ? undefined : abstract.textContent,
       }

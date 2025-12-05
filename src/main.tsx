@@ -1,7 +1,11 @@
 import '@fontsource/dejavu-mono'
 import '@fontsource/dejavu-sans'
 import '@fontsource/dejavu-serif'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
+import {
+  RouterProvider,
+  createHashHistory,
+  createRouter,
+} from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { routeTree } from './routeTree.gen'
@@ -13,6 +17,7 @@ const router = createRouter({
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
+  history: createHashHistory(),
 })
 
 declare module '@tanstack/react-router' {

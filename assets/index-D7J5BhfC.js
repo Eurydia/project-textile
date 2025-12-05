@@ -1,1 +1,0 @@
-import{R as t,j as e}from"./index-CDqngIbE.js";import{u as s}from"./useInjectScripts-CGaKROH-.js";function a(){const{body:o}=t.useLoaderData();return s(),e.jsx("div",{dangerouslySetInnerHTML:{__html:o}})}export{a as component};

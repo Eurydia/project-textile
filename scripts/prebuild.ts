@@ -19,6 +19,7 @@ mkdirSync(tempDir)
 for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   ignore: [posix.join(contentDir, 'temp', '**')],
 })) {
+  console.debug(blog)
   const sg = blog.split(posix.sep).slice(1)
   const bname = sg.at(-1)!
   const stem = basename(bname, '.tex')

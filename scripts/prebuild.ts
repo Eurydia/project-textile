@@ -17,8 +17,6 @@ import { JSDOM } from 'jsdom'
 function runSync(cmd: string, args: Array<string> = [], opt: any = {}) {
   const result = spawnSync(cmd, args, opt)
   console.log(result.status) // exit code
-  console.log(result.stdout.toString())
-  console.log(result.stderr.toString())
   console.log(result.error) // Error object if spawn failed
 }
 

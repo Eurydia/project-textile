@@ -4,13 +4,11 @@ import {
   mkdirSync,
   readFileSync,
   rmSync,
-  rmdir,
-  rmdirSync,
   writeFileSync,
 } from 'node:fs'
 import { posix, relative } from 'node:path'
 import { basename } from 'node:path/posix'
-import { spawn, spawnSync } from 'node:child_process'
+import { spawnSync } from 'node:child_process'
 import { globbySync } from 'globby'
 import { JSDOM } from 'jsdom'
 
@@ -43,10 +41,10 @@ for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   if (!existsSync(publicDir)) {
     mkdirSync(publicDir, { recursive: true })
   }
-  // copyFileSync(
-  //   posix.join(workingDir, `${stem}.html`),
-  //   posix.join(publicDir, `${stem}.html`),
-  // )
+  copyFileSync(
+    posix.join(workingDir, `${stem}.html`),
+    posix.join(publicDir, `${stem}.html`),
+  )
 }
 
 const sitemap: Record<

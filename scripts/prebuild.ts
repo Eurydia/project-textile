@@ -14,6 +14,8 @@ import { JSDOM } from 'jsdom'
 
 console.debug(process.cwd())
 
+spawnSync('ls')
+
 const contentDir = posix.join(posix.dirname(process.cwd()), 'content')
 const tempDir = posix.join(contentDir, 'temp')
 

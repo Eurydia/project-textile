@@ -3,15 +3,24 @@
   "ongoing": [
     {
       "title": "First Test Document",
-      "path": []
+      "path": [
+        "ongoing",
+        "doc1.html"
+      ]
     },
     {
       "title": "First Test Document",
-      "path": []
+      "path": [
+        "ongoing",
+        "doc1c.html"
+      ]
     },
     {
       "title": "First Test Document",
-      "path": []
+      "path": [
+        "ongoing",
+        "docd.html"
+      ]
     }
   ]
 }

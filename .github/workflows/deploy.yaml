@@ -35,6 +35,9 @@ jobs:
       - name: DEBUG
         run: ls -lh
 
+      - name: DEBUG
+        run: ls content/ -lh
+
       - name: Run prebuild (pdflatex / lwarp / etc.)
         run: npm run prebuild
 

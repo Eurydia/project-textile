@@ -14,7 +14,7 @@ import { JSDOM } from 'jsdom'
 
 const contentDir = posix.join(posix.dirname(process.cwd()), 'content')
 const tempDir = posix.join(contentDir, 'temp')
-
+console.debug(tempDir)
 try {
   if (!existsSync(tempDir)) {
     mkdirSync(tempDir)

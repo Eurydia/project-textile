@@ -43,6 +43,7 @@ jobs:
       
       - name: debug
         run: |
+          ls -lha 
           ls -lha dist
       
       - name: Deploy 🚀   

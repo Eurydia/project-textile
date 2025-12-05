@@ -41,10 +41,13 @@ for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   if (!existsSync(publicDir)) {
     mkdirSync(publicDir, { recursive: true })
   }
-  copyFileSync(
-    posix.join(workingDir, `${stem}.html`),
-    posix.join(publicDir, `${stem}.html`),
-  )
+  const htmlPath = posix.join(workingDir, `${stem}.html`)
+  if (!existsSync(htmlPath)) {
+    spawnSync('ls', ['-lha'], { cwd: workingDir, stdio: 'inherit' })
+    console.debug('!!!!!!!!!!!!!!! No html generated')
+    continue
+  }
+  copyFileSync(htmlPath, posix.join(publicDir, `${stem}.html`))
 }
 
 const sitemap: Record<

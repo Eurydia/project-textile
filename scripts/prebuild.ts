@@ -7,7 +7,7 @@ import {
 } from 'node:fs'
 import { posix, relative } from 'node:path'
 import { basename } from 'node:path/posix'
-import { spawnSync } from 'node:child_process'
+import { execSync, spawnSync } from 'node:child_process'
 import { globbySync } from 'globby'
 import { JSDOM } from 'jsdom'
 
@@ -25,18 +25,16 @@ for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   const stem = basename(bname, '.tex')
   sg.pop()
   const workingDir = posix.join(tempDir, ...sg, stem)
-  console.debug(sg, workingDir)
+
   mkdirSync(workingDir, { recursive: true })
   copyFileSync(blog, posix.join(workingDir, bname))
 
   spawnSync('pdflatex', [bname], { cwd: workingDir })
   spawnSync('lwarpmk', ['html'], { cwd: workingDir })
   spawnSync('lwarpmk', ['clean'], { cwd: workingDir })
-
+  execSync('ls')
   const publicDir = posix.join(process.cwd(), 'public', 'content', ...sg)
-  if (!existsSync(publicDir)) {
-    mkdirSync(publicDir, { recursive: true })
-  }
+  mkdirSync(publicDir, { recursive: true })
   copyFileSync(
     posix.join(workingDir, `${stem}.html`),
     posix.join(publicDir, `${stem}.html`),

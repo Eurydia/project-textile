@@ -16,9 +16,7 @@ const contentDir = posix.join(posix.dirname(process.cwd()), 'content')
 const tempDir = posix.join(contentDir, 'temp')
 console.debug(tempDir)
 try {
-  if (!existsSync(tempDir)) {
-    mkdirSync(tempDir)
-  }
+  mkdirSync(tempDir)
   for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
     ignore: [posix.join(contentDir, 'temp', '**')],
   })) {
@@ -52,7 +50,7 @@ try {
 } catch (e) {
   console.debug(e)
 } finally {
-  rmSync(posix.join(posix.dirname(process.cwd()), 'content', 'temp'), {
+  rmSync(tempDir, {
     recursive: true,
     force: true,
   })

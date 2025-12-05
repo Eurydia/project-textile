@@ -33,12 +33,7 @@ for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   spawnSync('lwarpmk', ['html'], { cwd: workingDir })
   spawnSync('lwarpmk', ['clean'], { cwd: workingDir })
 
-  const publicDir = posix.join(
-    posix.dirname(process.cwd()),
-    'public',
-    'content',
-    ...sg,
-  )
+  const publicDir = posix.join(process.cwd(), 'public', 'content', ...sg)
   if (!existsSync(publicDir)) {
     mkdirSync(publicDir, { recursive: true })
   }

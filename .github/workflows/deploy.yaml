@@ -35,11 +35,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: prepare html and sitemap
+      - name: Prepare html and sitemap
         run: npm run prepare
 
       - name: Build app
         run: npm run build
+      
+      - name: debug
+        run: |
+          ls -lha dist
       
       - name: Deploy 🚀   
         uses: JamesIves/github-pages-deploy-action@v4

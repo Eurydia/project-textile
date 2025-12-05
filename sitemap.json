@@ -1,4 +1,44 @@
 {
   "publications": [],
-  "ongoing": []
+  "ongoing": [
+    {
+      "title": "First Test Document",
+      "path": [
+        "runner",
+        "work",
+        "project-textile",
+        "project-textile",
+        "public",
+        "content",
+        "ongoing",
+        "doc1.html"
+      ]
+    },
+    {
+      "title": "First Test Document",
+      "path": [
+        "runner",
+        "work",
+        "project-textile",
+        "project-textile",
+        "public",
+        "content",
+        "ongoing",
+        "doc1c.html"
+      ]
+    },
+    {
+      "title": "First Test Document",
+      "path": [
+        "runner",
+        "work",
+        "project-textile",
+        "project-textile",
+        "public",
+        "content",
+        "ongoing",
+        "docd.html"
+      ]
+    }
+  ]
 }

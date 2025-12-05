@@ -10,15 +10,9 @@ import {
 } from 'node:fs'
 import { posix, relative } from 'node:path'
 import { basename } from 'node:path/posix'
-import { spawnSync } from 'node:child_process'
+import { spawn, spawnSync } from 'node:child_process'
 import { globbySync } from 'globby'
 import { JSDOM } from 'jsdom'
-
-function runSync(cmd: string, args: Array<string> = [], opt: any = {}) {
-  const result = spawnSync(cmd, args, opt)
-  console.log(result.status) // exit code
-  console.log(result.error) // Error object if spawn failed
-}
 
 const contentDir = posix.join(process.cwd(), 'content')
 const tempDir = posix.join(contentDir, 'temp')
@@ -30,20 +24,23 @@ mkdirSync(tempDir)
 for (const blog of globbySync(posix.join(contentDir, '**', '*.tex'), {
   ignore: [posix.join(contentDir, 'temp', '**')],
 })) {
-  console.debug(relative(process.cwd(), blog))
   const sg = relative(process.cwd(), blog).split(posix.sep).slice(1)
   const bname = sg.at(-1)!
   const stem = basename(bname, '.tex')
   sg.pop()
   const workingDir = posix.join(tempDir, ...sg, stem)
+  console.debug('!!!!')
+  console.debug(workingDir)
+  console.debug(blog)
+  console.debug(posix.join(workingDir, bname))
 
   mkdirSync(workingDir, { recursive: true })
   copyFileSync(blog, posix.join(workingDir, bname))
-
-  runSync('pdflatex', [bname], { cwd: workingDir })
-  runSync('lwarpmk', ['html'], { cwd: workingDir })
-  runSync('lwarpmk', ['clean'], { cwd: workingDir })
-  runSync('ls', ['-la'], { cwd: workingDir })
+  spawnSync('ls', ['-lha'], { cwd: workingDir, stdio: 'inherit' })
+  spawnSync('pdflatex', [bname], { cwd: workingDir, stdio: 'inherit' })
+  // runSync('lwarpmk', ['html'], { cwd: workingDir })
+  // runSync('lwarpmk', ['clean'], { cwd: workingDir })
+  // runSync('ls', ['-la'], { cwd: workingDir })
 
   const publicDir = posix.join(process.cwd(), 'public', 'content', ...sg)
   if (!existsSync(publicDir)) {

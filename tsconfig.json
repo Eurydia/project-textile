@@ -1,11 +1,5 @@
 {
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "prettier.config.js",
-    "vite.config.js",
-    "scripts/prebuild.js"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "prettier.config.js", "vite.config.js"],
 
   "compilerOptions": {
     "target": "ES2022",

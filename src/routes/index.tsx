@@ -1,6 +1,5 @@
-import { typesetMath } from '@/mathjax'
+import { useTypesetOnLoad } from '@/hooks/useInjectScripts'
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -15,10 +14,6 @@ export const Route = createFileRoute('/')({
 
 function App() {
   const { body } = Route.useLoaderData()
-  useEffect(() => {
-    ;(async () => {
-      await typesetMath()
-    })()
-  }, [])
+  useTypesetOnLoad()
   return <div dangerouslySetInnerHTML={{ __html: body }}></div>
 }

@@ -29,8 +29,6 @@ function RouteComponent() {
   const { siteBlogs } = Route.useRouteContext()
   const { body } = Route.useLoaderData()
   useTypesetOnLoad()
-
-  console.debug(body)
   return (
     <Stack spacing={2} divider={<Divider flexItem />}>
       <Box component="div" dangerouslySetInnerHTML={{ __html: body }}></Box>
@@ -39,7 +37,7 @@ function RouteComponent() {
         {siteBlogs
           .filter(
             (p) =>
-              p.path.length > 0 &&
+              p.path.length === 2 &&
               p.path[0] === 'publications' &&
               p.path.at(-1) !== 'index.html',
           )
@@ -51,7 +49,7 @@ function RouteComponent() {
                   <CardContent>{to.abstract ?? ''}</CardContent>
                   <CardActions>
                     <Link
-                      to="/publication"
+                      to="/publications/$"
                       params={{ _splat: to.path.slice(1).join('/') }}
                     >
                       More

@@ -61,7 +61,7 @@ export const Route = createRootRoute({
     }> = await fetch('/sitemap.json').then((r) => r.json())
     const siteMap = Object.fromEntries(
       siteBlogs.map((v) => {
-        return ['/' + v.path.join('/').replace(/.html$/, ''), v]
+        return ['/' + v.path.join('/'), v]
       }),
     )
     return {

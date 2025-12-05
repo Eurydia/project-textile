@@ -15,7 +15,7 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/ongoing/')({
   component: RouteComponent,
-  loader: async ({ context: { getBodyContent, siteBlogs } }) => {
+  loader: async ({ context: { getBodyContent } }) => {
     const html = await fetch('/content/ongoing/index.html').then((r) =>
       r.text(),
     )
@@ -40,7 +40,7 @@ function RouteComponent() {
         {siteBlogs
           .filter(
             (p) =>
-              p.path.length > 0 &&
+              p.path.length === 2 &&
               p.path[0] === 'ongoing' &&
               p.path.at(-1) !== 'index.html',
           )

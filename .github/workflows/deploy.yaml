@@ -12,14 +12,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      # - name: Checkout repo
+      #   uses: actions/checkout@v4
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'npm' 
+      # - name: Set up Node
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: '22'
+      #     cache: 'npm' 
 
       - name: Install LaTeX (pdflatex, etc.)
         run: |
@@ -28,29 +28,32 @@ jobs:
             texlive-latex-recommended \
             texlive-latex-extra \
             texlive-fonts-recommended
+      - name:
+        run: |
+          pdflatex --version
+          lwarpmk --version
+  #     - name: Install dependencies
+  #       run: npm ci
 
-      - name: Install dependencies
-        run: npm ci
+  #     - name: Run prebuild (pdflatex / lwarp / etc.)
+  #       run: npm run prebuild
 
-      - name: Run prebuild (pdflatex / lwarp / etc.)
-        run: npm run prebuild
+  #     - name: Build Vite app
+  #       run: npm run build
 
-      - name: Build Vite app
-        run: npm run build
+  #     - name: Upload built app as artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: vite-dist
+  #         path: artifact
 
-      - name: Upload built app as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: vite-dist
-          path: artifact
-
-  use-artifact:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download built app
-        uses: actions/download-artifact@v4
-        with:
-          name: vite-dist
-          path: dist
-      - run: ls -R dist
+  # use-artifact:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Download built app
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: vite-dist
+  #         path: dist
+  #     - run: ls -R dist

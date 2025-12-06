@@ -16,20 +16,19 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          submodules: false
-
-      - name: Init content submodule with read-only PAT
-        env:
-          CONTENT_PAT: ${{ secrets.SUBMODULE_PAT }}
-        run: |
-          git submodule set-url content "https://x-access-token:${CONTENT_PAT}@github.com/Eurydia/project-textile-content.git"
-          git submodule update --init --recursive
+          token: ${{ secrets.SUBMODULE_PAT }}
+          submodules: recursive
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm' 
+
+      - name: debug
+        run: |
+          ls -lha
+          ls -lha content
 
       - name: Install LaTeX packages
         run: |

@@ -33,8 +33,10 @@ for (const blog of globbySync('./content/**/*.tex', {
   const workingDir = join(tempDir, ...segments)
 
   cpSync(blog, join(workingDir, name), { recursive: true })
+  console.debug('(!!!) Working pdflatex')
   spawnSync('pdflatex', ['-interaction=nonstopmode', '-halt-on-error', name], {
     cwd: workingDir,
+    stdio: 'inherit',
   })
   console.debug('(!!!) Working LWARPMK')
   spawnSync('lwarpmk', ['html'], { cwd: workingDir, stdio: 'inherit' })

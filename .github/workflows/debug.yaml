@@ -7,7 +7,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+
     steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
     - name: Install LaTeX packages
       run: |
             sudo apt-get update
@@ -21,4 +25,5 @@ jobs:
         
     - name: dbug
       run: |
-        tlmgr
+        cd content/ongoing/
+        pdflatex project-1.tex

@@ -1,14 +1,10 @@
 \documentclass[11pt]{article}
-\usepackage[mathjax]{lwarp} % required immediately after documentclass
-
-% Microtype without touching footnotes (to avoid footnote patch issues)
-\usepackage[final,nopatch=footnote]{microtype}
-
-% Only AMS math packages – no mathtools
-\usepackage{amsmath,amssymb,amsthm}
-
+\usepackage[mathjax]{lwarp}
+\usepackage{polyglossia}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{lipsum}
-\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{geometry}
+\setdefaultlanguage{english}
 
 \title{Sample \LaTeX{} Document without \texttt{mathtools}}
 \author{A.~U.~Thor}

@@ -1,4 +1,4 @@
-import { useTypesetOnLoad } from '@/hooks/useInjectScripts'
+import { useTypesetOnLoad } from '@/hooks/useTypesetOnLoad'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/publications/$')({

@@ -1,6 +1,3 @@
-import '@fontsource/dejavu-mono'
-import '@fontsource/dejavu-sans'
-import '@fontsource/dejavu-serif'
 import {
   RouterProvider,
   createHashHistory,

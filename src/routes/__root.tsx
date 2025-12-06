@@ -85,7 +85,12 @@ export const Route = createRootRoute({
       <HeadContent />
       <ThemeProvider theme={MainTheme}>
         <CssBaseline />
-        <AppBar position="relative" variant="outlined" color="default">
+        <AppBar
+          position="relative"
+          variant="outlined"
+          color="default"
+          sx={{ paddingY: 0 }}
+        >
           <Toolbar disableGutters>
             <Stack
               direction={'row'}

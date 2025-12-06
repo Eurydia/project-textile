@@ -1,4 +1,4 @@
-import { useTypesetOnLoad } from '@/hooks/useInjectScripts'
+import { useTypesetOnLoad } from '@/hooks/useTypesetOnLoad'
 import {
   Box,
   Card,
@@ -22,7 +22,11 @@ export const Route = createFileRoute('/publications/')({
         query: '?raw',
       },
     )
-    return { body: getBodyContent(Object.values(items)[0].default) }
+    return {
+      body: getBodyContent(
+        items['/src/site/content/publications/index.html'].default,
+      ),
+    }
   },
   head: () => ({
     meta: [{ title: 'Publications' }],

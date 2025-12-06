@@ -36,7 +36,8 @@ for (const blog of globbySync('./content/**/*.tex', {
   spawnSync('pdflatex', ['-interaction=nonstopmode', '-halt-on-error', name], {
     cwd: workingDir,
   })
-  spawnSync('lwarpmk', ['html'], { cwd: workingDir })
+  console.debug('(!!!) Working LWARPMK')
+  spawnSync('lwarpmk', ['html'], { cwd: workingDir, stdio: 'inherit' })
 
   const htmlPath = join(workingDir, `${stem}.html`)
   if (!existsSync(htmlPath)) {

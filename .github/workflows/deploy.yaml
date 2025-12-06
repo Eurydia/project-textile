@@ -29,6 +29,7 @@ jobs:
             texlive-latex-extra \
             texlive-plain-generic \
             texlive-fonts-recommended \
+            texlive-lang-japanese \
             poppler-utils
       
       - name: Install dependencies

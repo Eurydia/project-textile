@@ -29,6 +29,17 @@ jobs:
           ls -lha
           ls -lha content
 
+      - name: Force submodule init/update
+        run: git submodule update --init --recursive
+
+      - name: Debug paths
+        run: |
+          git submodule status
+          ls -R .
+          ls -lha
+          ls -lha content
+
+
       - name: Install LaTeX packages
         run: |
           sudo apt-get update

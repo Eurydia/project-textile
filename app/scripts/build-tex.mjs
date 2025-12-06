@@ -27,7 +27,7 @@ cpSync(join(contentDir, 'figures'), join(tempDir, 'figures'), {
   recursive: true,
 })
 
-for (const blog of globbySync('../content/**/*.tex')) {
+for (const blog of globbySync('./content/**/*.tex')) {
   const segments = relative(process.cwd(), blog).split(path.sep).slice(1, -1)
   const name = basename(blog)
   const stem = basename(name, '.tex')

@@ -22,8 +22,7 @@ jobs:
         env:
           CONTENT_PAT: ${{ secrets.SUBMODULE_PAT }}
         run: |
-          git config --file=.gitmodules submodule.content.url "https://x-access-token:${CONTENT_PAT}@github.com/Eurydia/project-textile-content.git"
-          git submodule sync --recursive
+          git submodule set-url content "https://x-access-token:${CONTENT_PAT}@github.com/Eurydia/project-textile-content.git"
           git submodule update --init --recursive
 
       - name: Set up Node

@@ -15,30 +15,12 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm' 
-
-      - name: debug
-        run: |
-          ls -lha
-          ls -lha content
-
-      - name: Force submodule init/update
-        run: git submodule update --init --recursive
-
-      - name: Debug paths
-        run: |
-          git submodule status
-          ls -R .
-          ls -lha
-          ls -lha content
-
 
       - name: Install LaTeX packages
         run: |

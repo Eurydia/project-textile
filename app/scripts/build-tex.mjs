@@ -11,7 +11,11 @@ import {
 } from 'node:fs'
 import path, { basename, join, relative } from 'node:path'
 
-const contentDir = join(process.cwd(), '..', 'content')
+cpSync(join(process.cwd(), '..', 'content'), join(process.cwd(), 'content'), {
+  recursive: true,
+})
+
+const contentDir = join(process.cwd(), 'content')
 const tempDir = join(process.cwd(), 'temp')
 const assetDir = join(process.cwd(), 'src', 'site')
 

@@ -47,10 +47,8 @@ jobs:
         run: |
           ls -lha
           ls -lha src/site
-          ls -r -lha src/site/content
+          ls -lha src/site/content
           cat src/site/sitemap.json
-
-          
 
       - name: Build app
         run: npm run build

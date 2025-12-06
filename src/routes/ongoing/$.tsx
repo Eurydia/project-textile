@@ -22,7 +22,11 @@ export const Route = createFileRoute('/ongoing/$')({
     }
   },
   head: ({ loaderData }) => ({
-    meta: [{ title: loaderData?.title.title }],
+    meta: [
+      {
+        title: `${loaderData?.title.title} | Ongoing Research | ${__API_NAME__}`,
+      },
+    ],
   }),
 })
 

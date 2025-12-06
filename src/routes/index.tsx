@@ -14,7 +14,7 @@ export const Route = createFileRoute('/')({
     return { body: getBodyContent(Object.values(items)[0].default) }
   },
   head: () => ({
-    meta: [{ title: 'Home' }],
+    meta: [{ title: `Home | ${__API_NAME__}` }],
   }),
 })
 

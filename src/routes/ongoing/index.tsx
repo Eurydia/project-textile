@@ -30,7 +30,7 @@ export const Route = createFileRoute('/ongoing/')({
     }
   },
   head: () => ({
-    meta: [{ title: 'Ongoing Research' }],
+    meta: [{ title: `Ongoing Research | ${__API_NAME__}` }],
   }),
 })
 

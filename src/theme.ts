@@ -8,6 +8,6 @@ export const MainTheme = createTheme({
   typography: {
     fontFamily: "'EB Garamond', serif",
     fontSize: 16,
-    htmlFontSize: 16,
+    htmlFontSize: 20,
   },
 })

@@ -28,25 +28,24 @@ for (const blog of globbySync('./content/**/*.tex', {
 })) {
   const segments = relative(process.cwd(), blog).split(path.sep).slice(1, -1)
   const name = basename(blog)
-  console.log(segments, name)
+  const stem = basename(name, '.tex')
 
   const workingDir = join(tempDir, ...segments)
 
   cpSync(blog, join(workingDir, name), { recursive: true })
-  spawnSync('xelatex', [name, '-interaction=nonstopmode', '-halt-on-error'], {
+  spawnSync('pdflatex', ['-interaction=nonstopmode', '-halt-on-error', name], {
     cwd: workingDir,
   })
-  spawnSync('lwarpmk', ['html'], { cwd: workingDir })
+  spawnSync('lwarpmk', ['html', '-p', stem], { cwd: workingDir })
 
-  const stem = basename(name, '.tex')
   const htmlPath = join(workingDir, `${stem}.html`)
   if (!existsSync(htmlPath)) {
-    console.debug('!!!!!!!!!!!!!!! No html generated')
+    console.debug('(!!!) No html generated')
     continue
   }
   mkdirSync(join(assetDir, 'content', ...segments), { recursive: true })
   cpSync(htmlPath, join(assetDir, 'content', ...segments, `${stem}.html`))
-  spawnSync('lwarpmk', ['cleanall'], { cwd: workingDir })
+  spawnSync('lwarpmk', ['cleanall', '-p', stem], { cwd: workingDir })
 }
 
 cpSync(join(contentDir, 'figures'), join(assetDir, 'content', 'figures'), {

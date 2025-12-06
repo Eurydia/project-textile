@@ -29,7 +29,7 @@ export const Route = createFileRoute('/publications/')({
     }
   },
   head: () => ({
-    meta: [{ title: 'Publications' }],
+    meta: [{ title: `Publications | ${__API_NAME__}` }],
   }),
 })
 
@@ -40,7 +40,6 @@ function RouteComponent() {
   return (
     <Stack spacing={2} divider={<Divider flexItem />}>
       <Box component="div" dangerouslySetInnerHTML={{ __html: body }}></Box>
-
       <ImageList variant="masonry">
         {siteBlogs
           .filter(

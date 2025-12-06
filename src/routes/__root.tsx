@@ -1,3 +1,4 @@
+import { router } from '@/router'
 import siteBlogs from '@/site/sitemap.json'
 import { MainTheme } from '@/theme'
 import {
@@ -60,7 +61,10 @@ const getBodyContent = (html: string) => {
       el.href = figures[`/src/site/content${pathname}`].default
     } else {
       const url = new URL(el.href)
-      el.href = ''
+      const loc = router.buildLocation({
+        hash: `/${url.hash}`,
+      })
+      el.setAttribute('href', loc.url)
     }
   })
 

@@ -1,4 +1,5 @@
 import { useTypesetOnLoad } from '@/hooks/useTypesetOnLoad'
+import { Box } from '@mui/material'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/')({
@@ -21,5 +22,7 @@ export const Route = createFileRoute('/')({
 function App() {
   const { body } = Route.useLoaderData()
   useTypesetOnLoad()
-  return <div dangerouslySetInnerHTML={{ __html: body }}></div>
+  return (
+    <Box component={'div'} dangerouslySetInnerHTML={{ __html: body }}></Box>
+  )
 }

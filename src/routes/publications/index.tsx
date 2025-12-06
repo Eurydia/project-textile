@@ -40,7 +40,7 @@ function RouteComponent() {
   return (
     <Stack spacing={2} divider={<Divider flexItem />}>
       <Box component="div" dangerouslySetInnerHTML={{ __html: body }}></Box>
-      <ImageList variant="masonry">
+      <ImageList variant="masonry" cols={1}>
         {siteBlogs
           .filter(
             (p) =>
@@ -53,7 +53,37 @@ function RouteComponent() {
               <ImageListItem key={i}>
                 <Card variant="outlined">
                   <CardHeader title={to.title} />
-                  <CardContent>{to.abstract ?? ''}</CardContent>
+                  <CardContent
+                    component={'div'}
+                    title={to.abstract?.trim()}
+                    sx={{
+                      position: 'relative',
+                      overflow: 'hidden',
+
+                      lineHeight: 1.5,
+                      maxHeight: 'calc(1.5em * 5)',
+
+                      '&::after': (theme) => ({
+                        content: '""',
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+
+                        height: 'calc(1.5em * 2)',
+
+                        pointerEvents: 'none',
+                        background: `linear-gradient(
+        to bottom,
+        transparent 0%,
+        ${theme.palette.background.default} 60%,
+        ${theme.palette.background.default} 100%
+      )`,
+                      }),
+                    }}
+                  >
+                    {to.abstract ?? ''}
+                  </CardContent>
                   <CardActions>
                     <Link
                       to="/publications/$"

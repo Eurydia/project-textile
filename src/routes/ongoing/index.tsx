@@ -66,9 +66,32 @@ function RouteComponent() {
                     }
                   />
                   <CardContent
+                    component={'div'}
+                    title={to.abstract?.trim()}
                     sx={{
+                      position: 'relative',
                       overflow: 'hidden',
-                      maxHeight: 'calc(1.4em * 3)',
+
+                      lineHeight: 1.5,
+                      maxHeight: 'calc(1.5em * 5)',
+
+                      '&::after': (theme) => ({
+                        content: '""',
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+
+                        height: 'calc(1.5em * 2)',
+
+                        pointerEvents: 'none',
+                        background: `linear-gradient(
+        to bottom,
+        transparent 0%,
+        ${theme.palette.background.default} 60%,
+        ${theme.palette.background.default} 100%
+      )`,
+                      }),
                     }}
                   >
                     {to.abstract ?? ''}

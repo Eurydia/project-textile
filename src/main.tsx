@@ -1,21 +1,7 @@
-import {
-  RouterProvider,
-  createHashHistory,
-  createRouter,
-} from '@tanstack/react-router'
+import { RouterProvider } from '@tanstack/react-router'
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import { routeTree } from './routeTree.gen'
-
-const router = createRouter({
-  routeTree,
-  context: {},
-  defaultPreload: 'intent',
-  scrollRestoration: true,
-  defaultStructuralSharing: true,
-  defaultPreloadStaleTime: 0,
-  history: createHashHistory(),
-})
+import { router } from './router'
 
 declare module '@tanstack/react-router' {
   interface Register {

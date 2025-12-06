@@ -10,6 +10,7 @@ import {
   ImageList,
   ImageListItem,
   Stack,
+  Typography,
 } from '@mui/material'
 import { createFileRoute, Link } from '@tanstack/react-router'
 
@@ -65,43 +66,19 @@ function RouteComponent() {
                       />
                     }
                   />
-                  <CardContent
-                    component={'div'}
-                    title={to.abstract?.trim()}
-                    sx={{
-                      position: 'relative',
-                      overflow: 'hidden',
+                  {to.abstract && (
+                    <CardContent component={'div'}>
+                      <Typography fontWeight={800}>Abstract</Typography>
+                      <Typography variant="body2">{to.abstract}</Typography>
+                    </CardContent>
+                  )}
 
-                      lineHeight: 1.5,
-                      maxHeight: 'calc(1.5em * 5)',
-
-                      '&::after': (theme) => ({
-                        content: '""',
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-
-                        height: 'calc(1.5em * 2)',
-
-                        pointerEvents: 'none',
-                        background: `linear-gradient(
-        to bottom,
-        transparent 0%,
-        ${theme.palette.background.default} 60%,
-        ${theme.palette.background.default} 100%
-      )`,
-                      }),
-                    }}
-                  >
-                    {to.abstract ?? ''}
-                  </CardContent>
                   <CardActions>
                     <Link
                       to="/ongoing/$"
                       params={{ _splat: to.path.slice(1).join('/') }}
                     >
-                      More
+                      More &raquo;
                     </Link>
                   </CardActions>
                 </Card>

@@ -20,9 +20,9 @@ jobs:
 
       - name: Init content submodule with read-only PAT
         env:
-          CONTENT_PAT: ${{ secrets.SUBMODULE_PAT }}   # fine-grained PAT, Contents: read, repo: project-textile-content
+          CONTENT_PAT: ${{ secrets.SUBMODULE_PAT }}
         run: |
-          git config --file=.gitmodules submodule.content.url https://$CONTENT_PAT@github.com/Eurydia/project-textile-content.git
+          git config --file=.gitmodules submodule.content.url "https://x-access-token:${CONTENT_PAT}@github.com/Eurydia/project-textile-content.git"
           git submodule sync --recursive
           git submodule update --init --recursive
 

@@ -11,7 +11,7 @@ import {
 } from 'node:fs'
 import path, { basename, join, relative } from 'node:path'
 
-const contentDir = join(process.cwd(), 'content')
+const contentDir = join(process.cwd(), '..', 'content')
 const tempDir = join(process.cwd(), 'temp')
 const assetDir = join(process.cwd(), 'src', 'site')
 
@@ -23,7 +23,7 @@ cpSync(join(contentDir, 'figures'), join(tempDir, 'figures'), {
   recursive: true,
 })
 
-for (const blog of globbySync('./content/**/*.tex')) {
+for (const blog of globbySync('../content/**/*.tex')) {
   const segments = relative(process.cwd(), blog).split(path.sep).slice(1, -1)
   const name = basename(blog)
   const stem = basename(name, '.tex')
@@ -32,11 +32,12 @@ for (const blog of globbySync('./content/**/*.tex')) {
 
   cpSync(blog, join(workingDir, name), { recursive: true })
 
-  console.debug('(!!!) Working pdflatex')
+  console.debug(`(!!!) ${blog}`)
+  console.debug('Working pdflatex')
   spawnSync('pdflatex', ['-interaction=nonstopmode', '-halt-on-error', name], {
     cwd: workingDir,
   })
-  console.debug('(!!!) Working LWARPMK')
+  console.debug('Working LWARPMK')
   spawnSync('lwarpmk', ['html'], { cwd: workingDir })
 
   const htmlPath = join(workingDir, `${stem}.html`)

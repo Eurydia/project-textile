@@ -1,0 +1,1 @@
+import{w as t,j as e}from"./index-CrtSPwf9.js";import{u as n}from"./useTypesetOnLoad-Bat3LCDe.js";function a(){const{body:o}=t.useLoaderData();return n(),e.jsx("div",{dangerouslySetInnerHTML:{__html:o}})}export{a as component};

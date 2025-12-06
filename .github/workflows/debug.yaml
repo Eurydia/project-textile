@@ -27,3 +27,4 @@ jobs:
       run: |
         cd content/ongoing/
         pdflatex project-1.tex
+        lwarpmk html

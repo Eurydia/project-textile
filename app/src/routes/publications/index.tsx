@@ -57,7 +57,7 @@ function RouteComponent() {
                     disableRipple
                     onClick={() =>
                       nav({
-                        to: '/ongoing/$',
+                        to: '/publications/$',
                         params: { _splat: to.path.slice(1).join('/') },
                       })
                     }

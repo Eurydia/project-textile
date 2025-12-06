@@ -21,6 +21,6 @@ export default defineConfig({
     },
   },
   define: {
-    __APP_NAME__: 'Textile',
+    __APP_NAME__: JSON.stringify('Textile'),
   },
 })

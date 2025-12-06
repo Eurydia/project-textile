@@ -29,7 +29,7 @@ export const Route = createFileRoute('/publications/')({
     }
   },
   head: () => ({
-    meta: [{ title: `Publications | ${__API_NAME__}` }],
+    meta: [{ title: `Publications | ${__APP_NAME__}` }],
   }),
 })
 

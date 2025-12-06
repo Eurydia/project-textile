@@ -60,7 +60,7 @@ const getBodyContent = (html: string) => {
       el.href = figures[`/src/site/content${pathname}`].default
     } else {
       const url = new URL(el.href)
-      el.href = url.hash
+      el.href = ''
     }
   })
 

@@ -36,7 +36,7 @@ for (const blog of globbySync('./content/**/*.tex', {
   spawnSync('pdflatex', ['-interaction=nonstopmode', '-halt-on-error', name], {
     cwd: workingDir,
   })
-  spawnSync('lwarpmk', ['html', '-p', stem], { cwd: workingDir })
+  spawnSync('lwarpmk', ['html'], { cwd: workingDir })
 
   const htmlPath = join(workingDir, `${stem}.html`)
   if (!existsSync(htmlPath)) {
@@ -45,7 +45,7 @@ for (const blog of globbySync('./content/**/*.tex', {
   }
   mkdirSync(join(assetDir, 'content', ...segments), { recursive: true })
   cpSync(htmlPath, join(assetDir, 'content', ...segments, `${stem}.html`))
-  spawnSync('lwarpmk', ['cleanall', '-p', stem], { cwd: workingDir })
+  spawnSync('lwarpmk', ['cleanall'], { cwd: workingDir })
 }
 
 cpSync(join(contentDir, 'figures'), join(assetDir, 'content', 'figures'), {

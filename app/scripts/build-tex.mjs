@@ -59,7 +59,8 @@ writeFileSync(
   JSON.stringify(
     globbySync([
       './src/site/content/index.html',
-      './src/site/content/{ongoing|publications}/*.html',
+      './src/site/content/ongoing/*.html',
+      './src/site/content/publications/*.html',
     ]).map((p) => {
       const dom = new JSDOM(readFileSync(p))
       const abstract = dom.window.document.body.querySelector('.abstract > p')

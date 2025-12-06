@@ -1,0 +1,1 @@
+import{w as t,j as e}from"./index-BtfwwZ1V.js";import{u as n}from"./useTypesetOnLoad-D93KJ_9v.js";function a(){const{body:o}=t.useLoaderData();return n(),e.jsx("div",{dangerouslySetInnerHTML:{__html:o}})}export{a as component};

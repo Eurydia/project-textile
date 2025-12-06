@@ -12,7 +12,7 @@ import {
 import path, { basename, join, relative } from 'node:path'
 
 const contentDir = join(process.cwd(), 'content')
-const tempDir = join(contentDir, 'temp')
+const tempDir = join(process.cwd(), 'temp')
 const assetDir = join(process.cwd(), 'src', 'site')
 
 if (existsSync(tempDir)) {
@@ -23,9 +23,7 @@ cpSync(join(contentDir, 'figures'), join(tempDir, 'figures'), {
   recursive: true,
 })
 
-for (const blog of globbySync('./content/**/*.tex', {
-  ignore: ['content/temp/**'],
-})) {
+for (const blog of globbySync('./content/**/*.tex')) {
   const segments = relative(process.cwd(), blog).split(path.sep).slice(1, -1)
   const name = basename(blog)
   const stem = basename(name, '.tex')
@@ -33,6 +31,7 @@ for (const blog of globbySync('./content/**/*.tex', {
   const workingDir = join(tempDir, ...segments)
 
   cpSync(blog, join(workingDir, name), { recursive: true })
+
   console.debug('(!!!) Working pdflatex')
   spawnSync('pdflatex', ['-interaction=nonstopmode', '-halt-on-error', name], {
     cwd: workingDir,
@@ -57,7 +56,10 @@ cpSync(join(contentDir, 'figures'), join(assetDir, 'content', 'figures'), {
 writeFileSync(
   join(assetDir, 'sitemap.json'),
   JSON.stringify(
-    globbySync('./src/site/content/**/*.html').map((p) => {
+    globbySync([
+      './src/site/content/index.html',
+      './src/site/content/{ongoing|publications}/*.html',
+    ]).map((p) => {
       const dom = new JSDOM(readFileSync(p))
       const abstract = dom.window.document.body.querySelector('.abstract > p')
       return {

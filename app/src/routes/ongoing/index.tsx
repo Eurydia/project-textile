@@ -17,16 +17,14 @@ import { createFileRoute, Link } from '@tanstack/react-router'
 export const Route = createFileRoute('/ongoing/')({
   component: RouteComponent,
   loader: async ({ context: { getBodyContent } }) => {
-    const items: Record<string, { default: string }> = import.meta.glob(
-      '@/site/content/ongoing/index.html',
-      {
+    const items: Record<string, { default: string } | undefined> =
+      import.meta.glob('@/site/content/ongoing/index.html', {
         eager: true,
         query: '?raw',
-      },
-    )
+      })
     return {
       body: getBodyContent(
-        items['/src/site/content/ongoing/index.html'].default,
+        items['/src/site/content/ongoing/index.html']?.default,
       ),
     }
   },
@@ -69,7 +67,24 @@ function RouteComponent() {
                   {to.abstract && (
                     <CardContent component={'div'}>
                       <Typography fontWeight={800}>Abstract</Typography>
-                      <Typography variant="body2">{to.abstract}</Typography>
+                      <Typography
+                        variant="body2"
+                        sx={(theme) => ({
+                          position: 'absolute',
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          height: '3em',
+                          pointerEvents: 'none',
+                          backgroundImage: `linear-gradient(
+                            to bottom,
+                            ${theme.alpha(theme.palette.background.default, 0)},
+                            ${theme.palette.background.default}
+                          )`,
+                        })}
+                      >
+                        {to.abstract}
+                      </Typography>
                     </CardContent>
                   )}
 

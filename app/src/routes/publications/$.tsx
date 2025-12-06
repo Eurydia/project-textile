@@ -8,16 +8,14 @@ export const Route = createFileRoute('/publications/$')({
     context: { getBodyContent, siteMap },
     params: { _splat },
   }) => {
-    const items: Record<string, { default: string }> = import.meta.glob(
-      `@/site/content/publications/*.html`,
-      {
+    const items: Record<string, { default: string } | undefined> =
+      import.meta.glob(`@/site/content/publications/*.html`, {
         eager: true,
         query: '?raw',
-      },
-    )
+      })
     return {
       body: getBodyContent(
-        items[`/src/site/content/publications/${_splat}`].default,
+        items[`/src/site/content/publications/${_splat}`]?.default,
       ),
       title: siteMap[`/publications/${_splat}`].title,
     }

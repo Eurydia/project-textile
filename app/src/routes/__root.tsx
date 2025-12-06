@@ -1,5 +1,5 @@
 import { router } from '@/router'
-import siteBlogs from '@/site/sitemap.json'
+import siteBlogsRaw from '@/site/sitemap.json'
 import { MainTheme } from '@/theme'
 import {
   AppBar,
@@ -19,7 +19,16 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
-const getBodyContent = (html: string) => {
+const siteBlogs = siteBlogsRaw as {
+  title: string
+  path: string[]
+  abstract?: string
+}[]
+
+const getBodyContent = (html?: string) => {
+  if (!html) {
+    return ''
+  }
   const parser = new DOMParser()
   const dom = parser.parseFromString(html, 'text/html')
 
@@ -81,7 +90,7 @@ export const Route = createRootRoute({
     )
     return {
       siteMap,
-      siteBlogs,
+      siteBlogs: siteBlogs,
       getBodyContent,
     }
   },

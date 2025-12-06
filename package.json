@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 3000",
-    "prepare": "node scripts/prepare.mjs",
+    "build-tex": "node scripts/build-tex.mjs",
     "build": "vite build && tsc",
     "deploy": "gh-pages -d dist",
     "serve": "vite preview",

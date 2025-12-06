@@ -25,14 +25,21 @@ const getBodyContent = (html: string) => {
   if (!body) {
     return ''
   }
-
   body.querySelectorAll('a > img').forEach((el) => {
     const e = el as HTMLImageElement
     if (!e.src) {
       return
     }
+    const figures: Record<string, { default: string }> = import.meta.glob(
+      '@/site/content/figures/**/*',
+      {
+        query: '?url',
+        eager: true,
+      },
+    )
     const url = new URL(e.src)
-    e.src = `/content/${url.pathname}`
+    const pathname = url.pathname
+    e.src = figures[`/src/site/content${pathname}`].default
   })
 
   body.querySelectorAll('a').forEach((el) => {
@@ -41,8 +48,16 @@ const getBodyContent = (html: string) => {
     }
 
     if (el.matches('a:has(> img)')) {
+      const figures: Record<string, { default: string }> = import.meta.glob(
+        '@/site/content/figures/**/*',
+        {
+          query: '?url',
+          eager: true,
+        },
+      )
       const url = new URL(el.href)
-      el.href = `/content${url.pathname}`
+      const pathname = url.pathname
+      el.href = figures[`/src/site/content${pathname}`].default
     } else {
       const url = new URL(el.href)
       el.href = url.hash

@@ -18,6 +18,7 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+
 const getBodyContent = (html: string) => {
   const parser = new DOMParser()
   const dom = parser.parseFromString(html, 'text/html')

@@ -4,6 +4,7 @@
 \usepackage{geometry}
 \usepackage{hyperref}
 \usepackage{lipsum}
+\usepackage{graphicx}
 
 \geometry{margin=2.5cm}
 
@@ -16,7 +17,13 @@
 \tableofcontents
 \clearpage
 
-\includegraphics{figures/placeholder1.jpg}
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=\textwidth]{./figures/placeholder1.jpg}
+  \caption{System overview of the proposed method's  pipeline}
+  \label{fig:systemoverview}
+\end{figure}
 
 \begin{abstract}
   \lipsum[3]

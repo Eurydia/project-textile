@@ -50,7 +50,10 @@ const getBodyContent = (html?: string) => {
     )
     const url = new URL(e.src)
     const pathname = url.pathname
-    e.src = figures[`/src/site/content${pathname}`].default
+    e.src =
+      figures[
+        `/src/site/content/${pathname.split('/').slice(2).join('/')}`
+      ].default
   })
 
   body.querySelectorAll('a').forEach((el) => {
@@ -68,7 +71,10 @@ const getBodyContent = (html?: string) => {
       )
       const url = new URL(el.href)
       const pathname = url.pathname
-      el.href = figures[`/src/site/content${pathname}`].default
+      el.href =
+        figures[
+          `/src/site/content/${pathname.split('/').slice(2).join('/')}`
+        ].default
     } else {
       const url = new URL(el.href)
       const loc = router.buildLocation({

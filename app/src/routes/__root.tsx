@@ -80,6 +80,7 @@ const getBodyContent = (html?: string) => {
       const loc = router.buildLocation({
         hash: `/${url.hash}`,
       })
+      console.debug(loc.url)
       el.setAttribute('href', loc.url)
     }
   })

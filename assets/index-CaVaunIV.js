@@ -1,1 +1,0 @@
-import{R as t,j as e}from"./index-DZmubR76.js";import{u as n,B as s}from"./useTypesetOnLoad-CbsLOdij.js";function p(){const{body:o}=t.useLoaderData();return n(),e.jsx(s,{component:"div",dangerouslySetInnerHTML:{__html:o}})}export{p as component};

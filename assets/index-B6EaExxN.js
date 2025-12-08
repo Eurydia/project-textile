@@ -1,0 +1,1 @@
+import{R as t,j as e}from"./index-BHhWjXx7.js";import{u as n,B as s}from"./useTypesetOnLoad-DydN9OKE.js";function p(){const{body:o}=t.useLoaderData();return n(),e.jsx(s,{component:"div",dangerouslySetInnerHTML:{__html:o}})}export{p as component};

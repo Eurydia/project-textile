@@ -17,17 +17,23 @@ cpSync(join(process.cwd(), '..', 'content'), join(process.cwd(), 'content'), {
 
 const contentDir = join(process.cwd(), 'content')
 const tempDir = join(process.cwd(), 'temp')
-const assetDir = join(process.cwd(), 'src', 'site')
+const assetDir = join(process.cwd(), 'public')
 
 if (existsSync(tempDir)) {
   rmSync(tempDir, { force: true, recursive: true })
 }
+
 mkdirSync(tempDir)
+
 cpSync(join(contentDir, 'figures'), join(tempDir, 'figures'), {
   recursive: true,
 })
 
-for (const blog of globbySync('./content/**/*.tex')) {
+for (const blog of globbySync([
+  './content/index.tex',
+  './content/ongoing/*.tex',
+  './content/publications/*.tex',
+])) {
   const segments = relative(process.cwd(), blog).split(path.sep).slice(1, -1)
   const name = basename(blog)
   const stem = basename(name, '.tex')
@@ -49,6 +55,7 @@ for (const blog of globbySync('./content/**/*.tex')) {
     console.debug('(!!!) No html generated')
     continue
   }
+
   mkdirSync(join(assetDir, 'content', ...segments), { recursive: true })
   cpSync(htmlPath, join(assetDir, 'content', ...segments, `${stem}.html`))
   spawnSync('lwarpmk', ['cleanall'], { cwd: workingDir })
@@ -62,9 +69,9 @@ writeFileSync(
   join(assetDir, 'sitemap.json'),
   JSON.stringify(
     globbySync([
-      './src/site/content/index.html',
-      './src/site/content/ongoing/*.html',
-      './src/site/content/publications/*.html',
+      './public/content/index.html',
+      './public/content/ongoing/*.html',
+      './public/content/publications/*.html',
     ]).map((p) => {
       const dom = new JSDOM(readFileSync(p))
       const abstract = dom.window.document.body.querySelector('.abstract > p')

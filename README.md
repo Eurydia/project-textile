@@ -1,12 +1,9 @@
 # Textile
 
+It is a well known fact that one can build a personal blog, or to be more modern, a digital garden, easily using a preferred front-end framework along with a CI/CD pipeline that runs on a directory change. Oftentimes, a page would be written in Markdown. These Markdown documents can be transformed into HTML documents by the pipeline or interpreted into HTML at runtime by packages such as UnifiedJS. 
 
-## Usage
+The Markdown format, while simple and convenient to use, lacks a certain "charm." More precisely, the sort of charms we often see in LaTeX documents. Naturally, some have associated LaTeX with the fields of mathematics, and therefore, have dreaded these aesthetics.
 
-Set up content directory as submodule by creating a new repository then register it as a submodule with
+Still, it is undeniable that these documents possess certain charm and beauty. With that said, this project provides a small, but practical example to create a digital garden in which its source format is written in LaTeX.
 
-```git
-git submodule add https://github.com/<user>/<my-content-repo> content/
-```
-
-This will let GitHub know that the `content/` directory is a submodule and its content can be accessed by visiting the given repository.
+While much of the functionalities work well without resorting to trickeries and hacks, a small part of the front-end unfortunately employs, to put it bluntly, questionable decisions. Alas, a certain degree of jank should be expected when exploring unknown territories.

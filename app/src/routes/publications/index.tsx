@@ -17,15 +17,11 @@ import { createFileRoute } from '@tanstack/react-router'
 export const Route = createFileRoute('/publications/')({
   component: RouteComponent,
   loader: async ({ context: { getBodyContent } }) => {
-    const items: Record<string, { default: string } | undefined> =
-      import.meta.glob('@/site/content/publications/index.html', {
-        eager: true,
-        query: '?raw',
-      })
+    const doc = await fetch(
+      `${import.meta.env.BASE_URL}content/publications/index.html`,
+    )
     return {
-      body: getBodyContent(
-        items['/src/site/content/publications/index.html']?.default,
-      ),
+      body: doc.ok ? getBodyContent(await doc.text()) : undefined,
     }
   },
   head: () => ({
@@ -40,7 +36,9 @@ function RouteComponent() {
   useTypesetOnLoad()
   return (
     <Stack spacing={2} divider={<Divider flexItem />}>
-      <Box component="div" dangerouslySetInnerHTML={{ __html: body }}></Box>
+      {!!body && (
+        <Box component="div" dangerouslySetInnerHTML={{ __html: body }}></Box>
+      )}
       <ImageList variant="masonry">
         {siteBlogs
           .filter(

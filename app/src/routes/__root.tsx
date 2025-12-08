@@ -1,5 +1,4 @@
 import { router } from '@/router'
-import siteBlogsRaw from '@/site/sitemap.json'
 import { MainTheme } from '@/theme'
 import {
   AppBar,
@@ -19,12 +18,6 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
-const siteBlogs = siteBlogsRaw as {
-  title: string
-  path: string[]
-  abstract?: string
-}[]
-
 const getBodyContent = (html?: string) => {
   if (!html) {
     return ''
@@ -41,19 +34,9 @@ const getBodyContent = (html?: string) => {
     if (!e.src) {
       return
     }
-    const figures: Record<string, { default: string }> = import.meta.glob(
-      '@/site/content/figures/**/*',
-      {
-        query: '?url',
-        eager: true,
-      },
-    )
     const url = new URL(e.src)
-    const pathname = url.pathname
-    e.src =
-      figures[
-        `/src/site/content/${pathname.split('/').slice(2).join('/')}`
-      ].default
+    const src = url.pathname.split('/').slice(2).join('/')
+    e.src = `${import.meta.env.BASE_URL}content/${src}`
   })
 
   body.querySelectorAll('a').forEach((el) => {
@@ -62,25 +45,15 @@ const getBodyContent = (html?: string) => {
     }
 
     if (el.matches('a:has(> img)')) {
-      const figures: Record<string, { default: string }> = import.meta.glob(
-        '@/site/content/figures/**/*',
-        {
-          query: '?url',
-          eager: true,
-        },
-      )
       const url = new URL(el.href)
-      const pathname = url.pathname
-      el.href =
-        figures[
-          `/src/site/content/${pathname.split('/').slice(2).join('/')}`
-        ].default
+      const href = url.pathname.split('/').slice(2).join('/')
+      el.href = `${import.meta.env.BASE_URL}content/${href}`
     } else {
       const url = new URL(el.href)
       const loc = router.buildLocation({
         hash: `/${url.hash}`,
       })
-      el.setAttribute('href', loc.url)
+      el.href = loc.url
     }
   })
 
@@ -89,6 +62,14 @@ const getBodyContent = (html?: string) => {
 
 export const Route = createRootRoute({
   beforeLoad: async () => {
+    const siteBlogs: {
+      title: string
+      path: string[]
+      abstract?: string
+    }[] = await fetch(`${import.meta.env.BASE_URL}sitemap.json`)
+      .then((resp) => resp.json())
+      .catch(() => [])
+
     const siteMap = Object.fromEntries(
       siteBlogs.map((v) => {
         return ['/' + v.path.join('/'), v]

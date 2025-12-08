@@ -1,6 +1,6 @@
 import { useTypesetOnLoad } from '@/hooks/useTypesetOnLoad'
 import { Box } from '@mui/material'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, notFound } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/ongoing/$')({
   component: RouteComponent,
@@ -8,15 +8,14 @@ export const Route = createFileRoute('/ongoing/$')({
     context: { getBodyContent, siteMap },
     params: { _splat },
   }) => {
-    const items: Record<string, { default: string } | undefined> =
-      import.meta.glob(`@/site/content/ongoing/*.html`, {
-        eager: true,
-        query: '?raw',
-      })
+    const doc = await fetch(
+      `${import.meta.env.BASE_URL}content/ongoing/${_splat}`,
+    )
+    if (!doc.ok) {
+      throw notFound()
+    }
     return {
-      body: getBodyContent(
-        items[`/src/site/content/ongoing/${_splat}`]?.default,
-      ),
+      body: getBodyContent(await doc.text()),
       title: siteMap[`/ongoing/${_splat}`],
     }
   },

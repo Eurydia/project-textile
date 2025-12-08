@@ -42,14 +42,6 @@ jobs:
         run: npm run build-tex
         working-directory: app
 
-      - name: debug
-        working-directory: app
-        run: |
-          ls -lha
-          ls -lha src/site
-          ls -lha src/site/content
-          cat src/site/sitemap.json
-
       - name: Build app
         run: npm run build
         working-directory: app

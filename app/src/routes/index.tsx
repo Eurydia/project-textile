@@ -5,9 +5,7 @@ import { createFileRoute } from '@tanstack/react-router'
 export const Route = createFileRoute('/')({
   component: App,
   loader: async ({ context: { getBodyContent } }) => {
-    const doc = await fetch(
-      `${import.meta.env.BASE_URL}content/ongoing/index.html`,
-    )
+    const doc = await fetch(`${import.meta.env.BASE_URL}content/index.html`)
     return {
       body: doc.ok ? getBodyContent(await doc.text()) : '',
     }

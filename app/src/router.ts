@@ -9,5 +9,4 @@ export const router = createRouter({
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
   history: createHashHistory(),
-  basepath: '/project-textile/',
 })

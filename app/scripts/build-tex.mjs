@@ -29,11 +29,7 @@ cpSync(join(contentDir, 'figures'), join(tempDir, 'figures'), {
   recursive: true,
 })
 
-for (const blog of globbySync([
-  './content/index.tex',
-  './content/ongoing/*.tex',
-  './content/publications/*.tex',
-])) {
+for (const blog of globbySync(['./content/**/*.tex'])) {
   const segments = relative(process.cwd(), blog).split(path.sep).slice(1, -1)
   const name = basename(blog)
   const stem = basename(name, '.tex')
@@ -68,11 +64,7 @@ cpSync(join(contentDir, 'figures'), join(assetDir, 'content', 'figures'), {
 writeFileSync(
   join(assetDir, 'sitemap.json'),
   JSON.stringify(
-    globbySync([
-      './public/content/index.html',
-      './public/content/ongoing/*.html',
-      './public/content/publications/*.html',
-    ]).map((p) => {
+    globbySync(['./public/content/**/*.html']).map((p) => {
       const dom = new JSDOM(readFileSync(p))
       const abstract = dom.window.document.body.querySelector('.abstract > p')
       return {

@@ -56,7 +56,6 @@ const getBodyContent = (html?: string) => {
         hash: `/${url.hash}`,
       })
       el.href = `${import.meta.env.BASE_URL}#${loc.pathname.length === 1 ? loc.pathname.slice(1) : loc.pathname}${loc.hash}`
-      console.debug(el.href, loc)
     }
   })
 

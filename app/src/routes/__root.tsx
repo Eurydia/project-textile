@@ -55,7 +55,8 @@ const getBodyContent = (html?: string) => {
       const loc = router.buildLocation({
         hash: `/${url.hash}`,
       })
-      el.href = loc.url
+      el.href = `${import.meta.env.BASE_URL}#${loc.pathname.length === 1 ? loc.pathname.slice(1) : loc.pathname}${loc.hash}`
+      console.debug(el.href, loc)
     }
   })
 

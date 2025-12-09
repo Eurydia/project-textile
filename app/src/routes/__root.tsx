@@ -8,6 +8,8 @@ import {
   Stack,
   ThemeProvider,
   Toolbar,
+  Typography,
+  Link as MUILink,
 } from '@mui/material'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import {
@@ -110,6 +112,21 @@ export const Route = createRootRoute({
         <Container maxWidth="md" sx={{ paddingTop: 8, paddingBottom: 4 }}>
           <Outlet />
         </Container>
+        <AppBar
+          position="relative"
+          variant="outlined"
+          color="default"
+          sx={{ paddingY: 0 }}
+        >
+          <Toolbar disableGutters sx={{ justifyContent: 'center' }}>
+            <Typography variant="subtitle2">
+              Developed by{' '}
+              <MUILink href="https://github.com/eurydia">
+                Thanakorn Phuttharaksa
+              </MUILink>
+            </Typography>
+          </Toolbar>
+        </AppBar>
       </ThemeProvider>
       <TanStackDevtools
         config={{

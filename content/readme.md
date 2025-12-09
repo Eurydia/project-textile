@@ -1,18 +1,15 @@
 - Name of TeX document cannot contain a space or special characters.
-
-index.tex documents are special and used at special places.
-- /content/index.tex for home page
-- /content/ongoing/index.tex for introduction to ongoing research 
-- /content/publications/index.tex for introduction to publications
-
-
+- index.tex documents are special and used at special places.
+    - /content/index.tex for home page
+    - /content/ongoing/index.tex for introduction to ongoing research 
+    - /content/publications/index.tex for introduction to publications
 - beware of internal linkings
+    - when trying to link external documents, might not work properly
+    - eg. trying to reference document in publications/ from ongoing/
 - only first paragraph of the first abstract is used for display
-
-- a document is "published" if it is directly the child of 
+- only
     - "ongoing/" 
     - "publications/" 
-    - or it is the /index.html  itself.
-    - Document outside of these folders are considered private.
-
+    - "/index.html"  
+    - are published documents are ignored
 - some latex commands are not supported mathjax for example `\vline`

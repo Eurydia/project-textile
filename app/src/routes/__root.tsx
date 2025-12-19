@@ -1,15 +1,14 @@
+import _ from 'lodash'
 import { router } from '@/router'
 import { MainTheme } from '@/theme'
 import {
-  AppBar,
+  Box,
   Container,
   CssBaseline,
   Divider,
   Stack,
   ThemeProvider,
   Toolbar,
-  Typography,
-  Link as MUILink,
 } from '@mui/material'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import {
@@ -19,6 +18,7 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
+import type { TexArticle } from '@/types/types'
 
 const getBodyContent = (html?: string) => {
   if (!html) {
@@ -58,17 +58,14 @@ const getBodyContent = (html?: string) => {
       el.href = `${import.meta.env.BASE_URL}#${loc.pathname.length === 1 ? loc.pathname.slice(1) : loc.pathname}${loc.hash}`
     }
   })
-
   return body.innerHTML
 }
 
 export const Route = createRootRoute({
   beforeLoad: async () => {
-    const siteBlogs: {
-      title: string
-      path: string[]
-      abstract?: string
-    }[] = await fetch(`${import.meta.env.BASE_URL}sitemap.json`)
+    const siteBlogs: TexArticle[] = await fetch(
+      `${import.meta.env.BASE_URL}sitemap.json`,
+    )
       .then((resp) => resp.json())
       .catch(() => [])
 
@@ -79,54 +76,53 @@ export const Route = createRootRoute({
     )
     return {
       siteMap,
-      siteBlogs: siteBlogs,
+      siteBlogs,
       getBodyContent,
     }
   },
-  component: () => (
+  component: Root,
+})
+
+function Root() {
+  const { siteBlogs } = Route.useRouteContext()
+  return (
     <>
       <HeadContent />
       <ThemeProvider theme={MainTheme}>
         <CssBaseline />
-        <AppBar
-          position="relative"
-          variant="outlined"
-          color="default"
-          sx={{ paddingY: 0 }}
-        >
-          <Toolbar disableGutters>
-            <Stack
-              direction={'row'}
-              spacing={2}
-              useFlexGap
-              flexWrap={'nowrap'}
-              divider={<Divider flexItem orientation="vertical" />}
-            >
-              <Link to="/">Home</Link>
-              <Link to="/ongoing">Ongoing research</Link>
-              <Link to="/publications">Publications</Link>
-            </Stack>
-          </Toolbar>
-        </AppBar>
-
-        <Container maxWidth="md" sx={{ paddingTop: 8, paddingBottom: 4 }}>
-          <Outlet />
+        <Container maxWidth="md">
+          <Stack spacing={2} paddingY={2}>
+            <Toolbar disableGutters variant="dense">
+              <Stack
+                direction={'row'}
+                spacing={2}
+                useFlexGap
+                flexWrap={'nowrap'}
+                divider={<Divider flexItem orientation="vertical" />}
+              >
+                <Link to="/">Home</Link>
+                {_.uniq(
+                  siteBlogs
+                    .filter(
+                      ({ path }) =>
+                        path.length === 1 && path.at(0) !== 'index.html',
+                    )
+                    .map(({ path }) => path.at(0)!),
+                ).map((p, i) => (
+                  <Link
+                    to="/$"
+                    params={{ _splat: p }}
+                    style={{ textTransform: 'capitalize' }}
+                    key={i}
+                  >
+                    {p.replace(/.html$/, '')}
+                  </Link>
+                ))}
+              </Stack>
+            </Toolbar>
+            <Outlet />
+          </Stack>
         </Container>
-        <AppBar
-          position="relative"
-          variant="outlined"
-          color="default"
-          sx={{ paddingY: 0 }}
-        >
-          <Toolbar disableGutters sx={{ justifyContent: 'center' }}>
-            <Typography variant="subtitle2">
-              Developed by{' '}
-              <MUILink href="https://github.com/eurydia">
-                Thanakorn Phuttharaksa
-              </MUILink>
-            </Typography>
-          </Toolbar>
-        </AppBar>
       </ThemeProvider>
       <TanStackDevtools
         config={{
@@ -140,5 +136,5 @@ export const Route = createRootRoute({
         ]}
       />
     </>
-  ),
-})
+  )
+}

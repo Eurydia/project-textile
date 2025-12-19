@@ -6,9 +6,11 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
+  rmdir,
   rmSync,
   writeFileSync,
 } from 'node:fs'
+import { tmpdir } from 'node:os'
 import path, { basename, join, relative } from 'node:path'
 
 cpSync(join(process.cwd(), '..', 'content'), join(process.cwd(), 'content'), {
@@ -29,6 +31,7 @@ cpSync(join(contentDir, 'figures'), join(tempDir, 'figures'), {
   recursive: true,
 })
 
+rmSync(join(assetDir, 'content'), { recursive: true })
 for (const blog of globbySync(['./content/**/*.tex'])) {
   const segments = relative(process.cwd(), blog).split(path.sep).slice(1, -1)
   const name = basename(blog)
@@ -44,7 +47,9 @@ for (const blog of globbySync(['./content/**/*.tex'])) {
     cwd: workingDir,
   })
   console.debug('Working LWARPMK')
-  spawnSync('lwarpmk', ['html'], { cwd: workingDir })
+  spawnSync('lwarpmk', ['html', '-p', stem], {
+    cwd: workingDir,
+  })
 
   const htmlPath = join(workingDir, `${stem}.html`)
   if (!existsSync(htmlPath)) {
@@ -54,7 +59,7 @@ for (const blog of globbySync(['./content/**/*.tex'])) {
 
   mkdirSync(join(assetDir, 'content', ...segments), { recursive: true })
   cpSync(htmlPath, join(assetDir, 'content', ...segments, `${stem}.html`))
-  spawnSync('lwarpmk', ['cleanall'], { cwd: workingDir })
+  spawnSync('lwarpmk', ['cleanall', '-p', stem], { cwd: workingDir })
 }
 
 cpSync(join(contentDir, 'figures'), join(assetDir, 'content', 'figures'), {
@@ -76,3 +81,6 @@ writeFileSync(
   ),
   { flag: 'w+' },
 )
+
+rmSync(contentDir, { recursive: true })
+rmSync(tempDir, { recursive: true })

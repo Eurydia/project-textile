@@ -17,11 +17,13 @@ export const Route = createFileRoute('/')({
 
 function App() {
   const { body } = Route.useLoaderData()
+
   useEffect(() => {
     ;(async () => {
       await window.MathJax.typesetPromise().catch(() => {})
     })()
   }, [body])
+
   return (
     <Box component={'div'} dangerouslySetInnerHTML={{ __html: body }}></Box>
   )

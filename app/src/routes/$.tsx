@@ -1,25 +1,33 @@
 import { ArticleCard } from '@/components/article-card'
-import { Box, ImageList, ImageListItem, Stack } from '@mui/material'
-import { createFileRoute } from '@tanstack/react-router'
+import { Box, ImageList, ImageListItem, Stack, Typography } from '@mui/material'
+import { createFileRoute, notFound } from '@tanstack/react-router'
 import { useEffect, useMemo } from 'react'
 
 export const Route = createFileRoute('/$')({
   component: RouteComponent,
+  notFoundComponent: NotFoundComponent,
   loader: async ({
     context: { getBodyContent, siteMap },
     params: { _splat },
   }) => {
-    const url = `${import.meta.env.BASE_URL}content/${_splat}`
-    const doc = await fetch(url).then((resp) => resp.text())
+    const uri = `/${_splat}`
+    if (siteMap[uri] === undefined) {
+      throw notFound()
+    }
+
+    const resp = await fetch(`${import.meta.env.BASE_URL}content/${_splat}`)
+      .then((resp) => resp.text())
+      .catch(() => '')
+
     return {
-      body: getBodyContent(doc),
-      title: siteMap[`/${_splat}`],
+      body: getBodyContent(resp),
+      title: siteMap[uri],
     }
   },
   head: ({ loaderData }) => ({
     meta: [
       {
-        title: `${loaderData?.title.title} | ${__APP_NAME__}`,
+        title: `${loaderData?.title.title ?? 'Page not found'} | ${__APP_NAME__}`,
       },
     ],
   }),
@@ -60,5 +68,24 @@ function RouteComponent() {
         })}
       </ImageList>
     </Stack>
+  )
+}
+
+function NotFoundComponent() {
+  return (
+    <Box>
+      <Stack>
+        <Typography
+          fontStyle={'italic'}
+          color="textPrimary"
+          fontWeight={'bold'}
+        >
+          Page not found.
+        </Typography>
+        <Typography fontStyle={'italic'} variant="body2">
+          We could not find the document you requested.
+        </Typography>
+      </Stack>
+    </Box>
   )
 }

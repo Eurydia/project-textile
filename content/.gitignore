@@ -1,0 +1,7 @@
+*
+
+!*.tex
+
+!figures/**
+
+!.gitignore

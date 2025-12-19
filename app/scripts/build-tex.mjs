@@ -6,11 +6,9 @@ import {
   existsSync,
   mkdirSync,
   readFileSync,
-  rmdir,
   rmSync,
   writeFileSync,
 } from 'node:fs'
-import { tmpdir } from 'node:os'
 import path, { basename, join, relative } from 'node:path'
 
 cpSync(join(process.cwd(), '..', 'content'), join(process.cwd(), 'content'), {
@@ -31,7 +29,10 @@ cpSync(join(contentDir, 'figures'), join(tempDir, 'figures'), {
   recursive: true,
 })
 
-rmSync(join(assetDir, 'content'), { recursive: true })
+if (existsSync(join(assetDir, 'content'))) {
+  rmSync(join(assetDir, 'content'), { recursive: true })
+}
+
 for (const blog of globbySync(['./content/**/*.tex'])) {
   const segments = relative(process.cwd(), blog).split(path.sep).slice(1, -1)
   const name = basename(blog)

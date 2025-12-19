@@ -1,1 +1,0 @@
-import{q as o,r as e,j as a}from"./index-DA6KK0OS.js";import{B as s}from"./Box-BMAzIPt7.js";function p(){const{body:t}=o.useLoaderData();return e.useEffect(()=>{(async()=>await window.MathJax.typesetPromise().catch(()=>{}))()},[t]),a.jsx(s,{component:"div",dangerouslySetInnerHTML:{__html:t}})}export{p as component};

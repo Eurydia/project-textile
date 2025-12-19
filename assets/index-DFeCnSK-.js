@@ -1,0 +1,1 @@
+import{r as o,q as e,j as s}from"./index-DIhFd04L.js";import{B as a}from"./Box-BntDpQQI.js";const n=()=>{o.useEffect(()=>{(async()=>await window.MathJax.typesetPromise().catch(()=>{}))()},[])};function c(){const{body:t}=e.useLoaderData();return n(),s.jsx(a,{component:"div",dangerouslySetInnerHTML:{__html:t}})}export{c as component};

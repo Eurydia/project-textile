@@ -1,24 +1,11 @@
-import _ from 'lodash'
+import { AppHeader } from '@/components/app-header'
 import { router } from '@/router'
 import { MainTheme } from '@/theme'
-import {
-  Box,
-  Container,
-  CssBaseline,
-  Divider,
-  Stack,
-  ThemeProvider,
-  Toolbar,
-} from '@mui/material'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import {
-  HeadContent,
-  Link,
-  Outlet,
-  createRootRoute,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import type { TexArticle } from '@/types/types'
+import { Container, CssBaseline, Stack, ThemeProvider } from '@mui/material'
+import { TanStackDevtools } from '@tanstack/react-devtools'
+import { HeadContent, Outlet, createRootRoute } from '@tanstack/react-router'
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 
 const getBodyContent = (html?: string) => {
   if (!html) {
@@ -92,34 +79,7 @@ function Root() {
         <CssBaseline />
         <Container maxWidth="md">
           <Stack spacing={2} paddingY={2}>
-            <Toolbar disableGutters variant="dense">
-              <Stack
-                direction={'row'}
-                spacing={2}
-                useFlexGap
-                flexWrap={'nowrap'}
-                divider={<Divider flexItem orientation="vertical" />}
-              >
-                <Link to="/">Home</Link>
-                {_.uniq(
-                  siteBlogs
-                    .filter(
-                      ({ path }) =>
-                        path.length === 1 && path.at(0) !== 'index.html',
-                    )
-                    .map(({ path }) => path.at(0)!),
-                ).map((p, i) => (
-                  <Link
-                    to="/$"
-                    params={{ _splat: p }}
-                    style={{ textTransform: 'capitalize' }}
-                    key={i}
-                  >
-                    {p.replace(/.html$/, '')}
-                  </Link>
-                ))}
-              </Stack>
-            </Toolbar>
+            <AppHeader items={siteBlogs} />
             <Outlet />
           </Stack>
         </Container>

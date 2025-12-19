@@ -1,15 +1,5 @@
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardActions,
-  CardContent,
-  CardHeader,
-  ImageList,
-  ImageListItem,
-  Stack,
-  Typography,
-} from '@mui/material'
+import { ArticleCard } from '@/components/article-card'
+import { Box, ImageList, ImageListItem, Stack } from '@mui/material'
 import { createFileRoute } from '@tanstack/react-router'
 import { useEffect, useMemo } from 'react'
 
@@ -39,7 +29,7 @@ function RouteComponent() {
   const { body } = Route.useLoaderData()
   const { siteBlogs } = Route.useRouteContext()
   const { _splat } = Route.useParams()
-  const nav = Route.useNavigate()
+
   useEffect(() => {
     ;(async () => {
       await window.MathJax.typesetPromise().catch(() => {})
@@ -61,47 +51,10 @@ function RouteComponent() {
         <Box component="div" dangerouslySetInnerHTML={{ __html: body }}></Box>
       )}
       <ImageList variant="masonry">
-        {items.map((to, i) => {
+        {items.map((item, i) => {
           return (
             <ImageListItem key={i}>
-              <Card variant="outlined">
-                <CardActionArea
-                  disableRipple
-                  onClick={() =>
-                    nav({
-                      to: '/$',
-                      params: { _splat: to.path.join('/') },
-                    })
-                  }
-                >
-                  <CardHeader title={to.title} />
-                  {to.abstract && (
-                    <CardContent component={'div'}>
-                      <Typography fontWeight={800}>Abstract</Typography>
-                      <Typography
-                        variant="body2"
-                        sx={(t) => ({
-                          maxHeight: 250,
-                          overflow: 'hidden',
-                          position: 'relative',
-                          '&::after': {
-                            content: '""',
-                            position: 'absolute',
-                            inset: 'auto 0 0',
-                            height: 32,
-                            pointerEvents: 'none',
-                            background: `linear-gradient(to bottom, transparent, ${t.palette.background.default})`,
-                          },
-                        })}
-                      >
-                        {to.abstract}
-                      </Typography>
-                    </CardContent>
-                  )}
-
-                  <CardActions>More &raquo;</CardActions>
-                </CardActionArea>
-              </Card>
+              <ArticleCard article={item} />
             </ImageListItem>
           )
         })}

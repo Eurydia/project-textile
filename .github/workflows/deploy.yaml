@@ -6,15 +6,18 @@ on:
         branches:
             - main
         paths: 
-            - content/**
             - content
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    permissions: 
+      contents: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.ACTION_PAT }}
         
       - name: Set up Node
         uses: actions/setup-node@v4
@@ -50,3 +53,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: app/dist
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -34,7 +34,7 @@ if (existsSync(join(assetDir, 'content'))) {
 }
 
 for (const blog of globbySync(['./content/**/*.tex'], {
-  ignore: ['**/__*/**'],
+  ignore: ['**/__*/**', '__*.tex'],
 })) {
   const segments = relative(process.cwd(), blog).split(path.sep).slice(1, -1)
   const name = basename(blog)

@@ -2,3 +2,8 @@
 - setup PAT for content repository and add as a secret in app
 - change `__APP_NAME__` under `env` in `vite.config.ts`
 - change path of submodule in `.gitmodule` 
+
+#######################
+
+- shortcut
+- no jekyll

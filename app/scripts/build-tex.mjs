@@ -27,6 +27,27 @@ mkdirSync(tempDir)
 
 cpSync(join(contentDir, 'figures'), join(tempDir, 'figures'), {
   recursive: true,
+  filter: (src) => {
+    if (src === join(contentDir, 'figures')) {
+      return true
+    }
+
+    const rel = path.relative(join(contentDir, 'figures'), src)
+    const relPosix = rel.split(path.sep).join('/')
+
+    // If any path segment starts with "__", exclude it.
+    // This ensures "__dir/..." is excluded even if encountered.
+    const parts = relPosix.split('/')
+    if (parts.some((p) => p.startsWith('__'))) {
+      return false
+    }
+    // Keep directories (so traversal continues for non-dunder dirs)
+    const st = lstatSync(src)
+    if (st.isDirectory()) return true
+
+    // Apply your include rule to files
+    return include.test(relPosix)
+  },
 })
 
 if (existsSync(join(assetDir, 'content'))) {
